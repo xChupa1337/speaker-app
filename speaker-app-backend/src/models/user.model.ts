@@ -19,13 +19,27 @@ const progressSchema = new mongoose.Schema(
 
 const userSchema = new mongoose.Schema(
   {
-    email: { type: String, required: true, unique: true },
-    passwordHash: { type: String, required: true },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      match: [/^\S+@\S+\.\S+$/, "Please provide a valid email address"],
+    },
+    password: { type: String, required: true, minLength: 6, maxLength: 255 },
     name: { type: String },
+    isVerified: { type: Boolean, default: false },
     settings: settingsSchema,
     progress: [progressSchema],
   },
   { timestamps: true },
 );
 
-module.exports = mongoose.model("User", userSchema);
+userSchema.set("toJSON", {
+  transform: function (doc, ret, options) {
+    delete ret.password;
+    delete ret.__v;
+    return ret;
+  },
+});
+
+export const User = mongoose.model("User", userSchema);

@@ -4,9 +4,9 @@
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "start": "ts-node src/app.ts",
     "build": "tsc",
-    "dev": "nodemon src/index.ts",
+    "dev": "nodemon src/app.ts",
     "test": ""
   },
   "keywords": [],
@@ -19,8 +19,13 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/express": "^5.0.1",
+    "@types/jsonwebtoken": "^9.0.9",
+    "bcryptjs": "^3.0.2",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.14.1"
   }
 }
