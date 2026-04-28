@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { HttpError } from "../utils/error-type";
 import { User } from "../models/user.model";
 import { JWT_SECRET } from "../config/env";
+import { sendEmail } from "../utils/send-email";
 
 export const signUp = async (
   req: Request,
@@ -23,9 +24,21 @@ export const signUp = async (
       return next(new HttpError("Something went wrong", 400));
     }
     const hashPassword = await bcrypt.hash(password, 8);
-    const user = await User.create({ name, email, password: hashPassword });
+    const userCode = Math.floor(1000 + Math.random() * 9000);
+    const user = await User.create({
+      name,
+      email,
+      password: hashPassword,
+      code: userCode,
+    });
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, {
       expiresIn: "7d",
+    });
+    await sendEmail({
+      to: user.email,
+      type: "Registration Code",
+      userName: user.name,
+      code: userCode,
     });
     res.status(200).json({ success: true, data: { token, user } });
   } catch (e) {
