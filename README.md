@@ -1,93 +1,174 @@
-# speaker-app
+# 🎙️ Speaker App — Backend
 
+[![Pipeline Status](https://git.ztu.edu.ua/ipz/2022-2026/ipz-22-3/sokulskyy-oleh/snp-labs-soi/speaker-app/badges/main/pipeline.svg)](https://git.ztu.edu.ua/ipz/2022-2026/ipz-22-3/sokulskyy-oleh/snp-labs-soi/speaker-app/-/pipelines)
+[![Coverage](https://git.ztu.edu.ua/ipz/2022-2026/ipz-22-3/sokulskyy-oleh/snp-labs-soi/speaker-app/badges/main/coverage.svg)](https://git.ztu.edu.ua/ipz/2022-2026/ipz-22-3/sokulskyy-oleh/snp-labs-soi/speaker-app/-/jobs)
 
+## Опис проекту
 
-## Getting started
+RESTful API для застосунку Speaker App — платформи для вивчення мов через аудіо-контент. Надає ендпоінти для автентифікації користувачів, управління темами, розділами та медіа-контентом.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## Технологічний стек
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+| Компонент | Технологія |
+|-----------|------------|
+| **Runtime** | Node.js 20 |
+| **Мова** | TypeScript 5 |
+| **Фреймворк** | Express 5 |
+| **База даних** | MongoDB (Mongoose 8) |
+| **Автентифікація** | JWT (jsonwebtoken) |
+| **Email** | Nodemailer |
+| **Тестування** | Jest + Supertest + MongoMemoryServer |
+| **CI/CD** | GitLab CI/CD (git.ztu.edu.ua) |
+| **Контейнеризація** | Docker (multi-stage build) |
 
-## Add your files
+## Швидкий старт
 
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+### Вимоги
+- Node.js 20+
+- MongoDB (локально або Atlas)
+
+### Встановлення
+
+```bash
+# Клонування репозиторію
+git clone https://git.ztu.edu.ua/ipz/2022-2026/ipz-22-3/sokulskyy-oleh/snp-labs-soi/speaker-app.git
+cd speaker-app/speaker-app-backend
+
+# Встановлення залежностей
+npm install
+
+# Створення файлу змінних середовища
+cp .env.example .env.development.local
+# Заповніть змінні у .env.development.local
+```
+
+### Змінні середовища
+
+Створіть файл `.env.development.local` у папці `speaker-app-backend/`:
+
+```env
+NODE_ENV=development
+PORT=3000
+BASE_URL=/api/v1
+MONGODB_URI=mongodb://localhost:27017/speaker-app
+JWT_SECRET=your-super-secret-jwt-key
+EMAIL_ADDRESS_SENDER=your@email.com
+EMAIL_PASSWORD=your-email-password
+```
+
+### Запуск
+
+```bash
+# Режим розробки (з hot-reload)
+npm run dev
+
+# Production збірка
+npm run build
+npm start
+```
+
+## Тестування
+
+```bash
+# Запуск всіх тестів
+npm test
+
+# Запуск з coverage звітом
+npm run test:coverage
+
+# Coverage звіт відкриється у: coverage/index.html
+```
+
+### Структура тестів
 
 ```
-cd existing_repo
-git remote add origin https://git.ztu.edu.ua/ipz/2022-2026/ipz-22-3/sokulskyy-oleh/snp-labs-soi/speaker-app.git
-git branch -M main
-git push -uf origin main
+src/__tests__/
+├── unit/
+│   └── http-error.test.ts      ← 9 тестів для HttpError класу
+└── integration/
+    └── auth.test.ts            ← 9 тестів для auth API endpoints
 ```
 
-## Integrate with your tools
+Тести не потребують зовнішнього MongoDB — використовується `mongodb-memory-server` (in-memory БД).
 
-* [Set up project integrations](https://git.ztu.edu.ua/ipz/2022-2026/ipz-22-3/sokulskyy-oleh/snp-labs-soi/speaker-app/-/settings/integrations)
+## API Endpoints
 
-## Collaborate with your team
+### Health Check
+```
+GET /health
+```
+Повертає статус застосунку. Використовується CI/CD pipeline для перевірки після деплою.
 
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+### Автентифікація
+```
+POST /api/v1/auth/sign-up    ← Реєстрація нового користувача
+POST /api/v1/auth/sign-in    ← Вхід у систему
+```
 
-## Test and Deploy
+## Docker
 
-Use the built-in continuous integration in GitLab.
+```bash
+# Збірка образу (multi-stage, ~180MB)
+docker build -t speaker-app-backend .
 
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
+# Запуск контейнера
+docker run -p 3000:3000 \
+  -e MONGODB_URI=your-mongodb-uri \
+  -e JWT_SECRET=your-secret \
+  speaker-app-backend
+```
 
-***
+## Структура проекту
 
-# Editing this README
+```
+speaker-app-backend/
+├── .gitlab-ci.yml              ← CI/CD pipeline (4 stages)
+├── Dockerfile                  ← Multi-stage Docker build
+├── .dockerignore
+├── README.md
+└── speaker-app-backend/
+    ├── package.json
+    ├── tsconfig.json
+    ├── jest.config.js           ← Конфігурація тестів
+    └── src/
+        ├── app.ts               ← Точка входу, Express app
+        ├── config/              ← Конфігурація (env, nodemailer)
+        ├── controllers/         ← Логіка обробки запитів
+        ├── database/            ← MongoDB підключення
+        ├── middlewares/         ← Express middleware (error handler)
+        ├── models/              ← Mongoose схеми
+        ├── routes/              ← Маршрути API
+        ├── utils/               ← Утиліти (email, error types)
+        └── __tests__/           ← Тести (unit + integration)
+```
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+## CI/CD Pipeline
 
-## Suggestions for a good README
+Pipeline складається з **4 послідовних етапів**:
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+```
+┌─────────┐    ┌──────┐    ┌────────┐    ┌────────┐
+│  BUILD  │───▶│ TEST │───▶│ DOCKER │───▶│ DEPLOY │
+└─────────┘    └──────┘    └────────┘    └────────┘
+  npm ci         Jest        docker        staging
+  tsc build    coverage      build         (main only)
+  type check
+```
 
-## Name
-Choose a self-explaining name for your project.
+| Етап | Що робить | Коли запускається |
+|------|-----------|-------------------|
+| **build** | `npm ci` + `tsc` компіляція | Кожен push |
+| **test** | Jest (18 тестів) + coverage | Кожен push + MR |
+| **node_lint** | TypeScript type-check | Кожен push |
+| **docker** | `docker build` (multi-stage) | main + develop |
+| **deploy** | Розгортання на staging | Тільки main |
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+### Конфігурація: `.gitlab-ci.yml`
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+Файл знаходиться у корені репозиторію. Runner тег: `student`.
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+## Автор
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+**Сокульський Олег** — ІПЗ-22-3, ЖДУ ім. Івана Франка  
+Дисципліна: Системне та мережне програмування  
+Репозиторій: [git.ztu.edu.ua](https://git.ztu.edu.ua/ipz/2022-2026/ipz-22-3/sokulskyy-oleh/snp-labs-soi/speaker-app)

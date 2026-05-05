@@ -1,0 +1,49 @@
+# docker-compose.yml — локальний запуск всього проекту однією командою
+# Використання: docker compose up
+
+services:
+
+  # ── Backend: Node.js API ──────────────────────────────────────────────
+  backend:
+    build:
+      context: ./speaker-app-backend   # папка з Dockerfile
+      dockerfile: Dockerfile
+    container_name: speaker-backend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - MONGODB_URI=${MONGODB_URI}
+      - JWT_SECRET=${JWT_SECRET}
+      - BASE_URL=/api/v1
+      - EMAIL_ADDRESS_SENDER=${EMAIL_ADDRESS_SENDER}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+    depends_on:
+      - mongo
+    restart: unless-stopped
+
+  # ── Frontend: (додасте коли з'явиться папка) ──────────────────────────
+  # frontend:
+  #   build:
+  #     context: ./speaker-app-frontend
+  #     dockerfile: Dockerfile
+  #   container_name: speaker-frontend
+  #   ports:
+  #     - "5173:5173"
+  #   depends_on:
+  #     - backend
+  #   restart: unless-stopped
+
+  # ── MongoDB: локальна база даних ──────────────────────────────────────
+  mongo:
+    image: mongo:7-jammy
+    container_name: speaker-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db   # дані зберігаються між перезапусками
+    restart: unless-stopped
+
+volumes:
+  mongo_data:   # іменований volume для MongoDB даних
