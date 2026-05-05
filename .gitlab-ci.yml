@@ -1,188 +1,120 @@
-# ── CI/CD Pipeline для Speaker App Backend ───────────────────────────────
+# CI/CD Pipeline for Speaker App Backend
 # Node.js 20 + TypeScript + Express + MongoDB
-# Репозиторій: git.ztu.edu.ua
 
-# ── Визначення етапів pipeline ────────────────────────────────────────────
 stages:
-  - build    # Встановлення залежностей + компіляція TypeScript
-  - test     # Запуск тестів + coverage звіт
-  - docker   # Збірка Docker образу
-  - deploy   # Розгортання (тільки для гілки main)
+  - build
+  - test
+  - docker
+  - deploy
 
-# ── Глобальні змінні ──────────────────────────────────────────────────────
 variables:
   APP_NAME: "speaker-app-backend"
-  NODE_VERSION: "20"
 
-# ── Кешування node_modules між запусками ─────────────────────────────────
-# Без кешу кожен pipeline запускав би npm install (~30-60 сек)
-# З кешем — використовується збережений node_modules (~2-5 сек)
 cache:
   key: "$CI_COMMIT_REF_SLUG"
   paths:
     - speaker-app-backend/node_modules/
 
-# ── Stage: BUILD ──────────────────────────────────────────────────────────
+# Stage: BUILD
 node_build:
   stage: build
   image: node:20-alpine
-  tags: [student]
+  tags:
+    - student
   script:
     - cd speaker-app-backend
-
-    # npm ci → чистіший аналог npm install для CI
-    # Використовує package-lock.json для відтворюваних збірок
-    # Швидший за npm install якщо є кеш
     - npm ci
-
-    # Компілюємо TypeScript у JavaScript
-    # Перевіряє типи і генерує dist/ папку
     - npm run build
-
-    # Показуємо що зібрано (для дебагу якщо щось піде не так)
     - ls -la dist/
-
   artifacts:
-    # Зберігаємо скомпільований код для наступних stages
     paths:
       - speaker-app-backend/dist/
       - speaker-app-backend/node_modules/
     expire_in: 1 hour
-
   rules:
-    # Запускати для будь-якого push у будь-яку гілку
     - if: "$CI_COMMIT_BRANCH"
       when: always
 
-# ── Stage: TEST ───────────────────────────────────────────────────────────
+# Stage: TEST - unit and integration tests with coverage
 node_test:
   stage: test
   image: node:20-alpine
-  tags: [student]
+  tags:
+    - student
   dependencies:
-    - node_build   # використовуємо node_modules зі stage build
+    - node_build
   script:
     - cd speaker-app-backend
-
-    # Запускаємо тести з генерацією coverage звіту
-    # cross-env NODE_ENV=test → тестовий режим (не потребує реального MongoDB)
-    # jest --coverage → генерує HTML і lcov звіти
-    # jest --forceExit → примусово завершити Jest після тестів
     - npm run test:coverage
-
-    # Виводимо підсумок покриття у лог pipeline
-    - echo "── Coverage Summary ──"
-    - cat coverage/coverage-summary.json 2>/dev/null || echo "Summary not generated"
-
-  # coverage: regex що GitLab використовує для відображення % у pipeline UI
-  # Витягує відсоток з рядку типу "Statements   : 75.00% ( 30/40 )"
   coverage: '/Statements\s*:\s*(\d+\.?\d*)%/'
-
   artifacts:
     paths:
-      - speaker-app-backend/coverage/   # HTML звіт — завантажте і перегляньте
+      - speaker-app-backend/coverage/
     expire_in: 7 days
     reports:
-      # coverage_report: GitLab відображає coverage у Merge Request
       coverage_report:
         coverage_format: cobertura
         path: speaker-app-backend/coverage/cobertura-coverage.xml
-
   rules:
     - if: "$CI_COMMIT_BRANCH"
       when: always
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: always
 
-# ── Лінтинг TypeScript ────────────────────────────────────────────────────
+# Stage: TEST - TypeScript type checking
 node_lint:
   stage: test
   image: node:20-alpine
-  tags: [student]
+  tags:
+    - student
   dependencies:
     - node_build
   script:
     - cd speaker-app-backend
-    # Перевіряємо TypeScript типи без генерації файлів
-    # --noEmit → тільки перевірка, без запису файлів
     - npx tsc --noEmit
     - echo "TypeScript type check passed!"
-  allow_failure: false   # TypeScript помилки БЛОКУЮТЬ pipeline
+  allow_failure: false
   rules:
     - if: "$CI_COMMIT_BRANCH"
       when: always
 
-# ── Stage: DOCKER ─────────────────────────────────────────────────────────
+# Stage: DOCKER - build Docker image
 docker_build:
   stage: docker
-  # docker:27 → образ з Docker CLI
-  # services: docker:27-dind → Docker-in-Docker daemon (потрібен для docker build)
   image: docker:27
   services:
     - docker:27-dind
-  tags: [student]
+  tags:
+    - student
   variables:
-    # DOCKER_HOST → вказуємо де знаходиться DinD daemon
     DOCKER_HOST: tcp://docker:2376
     DOCKER_TLS_CERTDIR: "/certs"
     DOCKER_TLS_VERIFY: 1
     DOCKER_CERT_PATH: "/certs/client"
   script:
-    # Збираємо Docker образ
-    # -t → тег образу: назва:версія
-    # $CI_COMMIT_SHORT_SHA → перші 8 символів SHA коміту (унікальна версія)
-    # $CI_COMMIT_REF_SLUG → назва гілки (безпечна для URL, наприклад main)
-    - docker build -t $APP_NAME:$CI_COMMIT_SHORT_SHA -t $APP_NAME:$CI_COMMIT_REF_SLUG ./speaker-app-backend
-
-    # Показуємо інформацію про зібраний образ
+    - docker build -t $APP_NAME:$CI_COMMIT_SHORT_SHA ./speaker-app-backend
     - docker images | grep $APP_NAME
-    - echo "Docker image built successfully!"
-    - echo "Image tag: $APP_NAME:$CI_COMMIT_SHORT_SHA"
-
+    - echo "Docker image built successfully"
   rules:
-    # Збирати Docker образ тільки для основних гілок
     - if: '$CI_COMMIT_BRANCH == "main"'
       when: always
     - if: '$CI_COMMIT_BRANCH == "develop"'
       when: always
 
-# ── Stage: DEPLOY ─────────────────────────────────────────────────────────
+# Stage: DEPLOY - simulated deploy (only for main branch)
 deploy_staging:
   stage: deploy
   image: alpine:latest
-  tags: [student]
+  tags:
+    - student
   script:
-    # ── Інформація про деплой ───────────────────────────────────────────
-    - echo "════════════════════════════════════════"
-    - echo "  DEPLOYING $APP_NAME to STAGING"
-    - echo "════════════════════════════════════════"
-    - echo "Branch:   $CI_COMMIT_BRANCH"
-    - echo "Commit:   $CI_COMMIT_SHORT_SHA"
-    - echo "Author:   $CI_COMMIT_AUTHOR"
-    - echo "Time:     $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
-    - echo "Pipeline: $CI_PIPELINE_URL"
-    - echo "────────────────────────────────────────"
-
-    # ── Місце для реального деплою ─────────────────────────────────────
-    # Варіант 1: Deploy Hook (Render/Railway тощо)
-    # curl -s "$DEPLOY_HOOK_URL"
-
-    # Варіант 2: SSH на сервер
-    # ssh -i ~/.ssh/deploy_key $DEPLOY_USER@$DEPLOY_HOST "cd /app && docker-compose pull && docker-compose up -d"
-
-    # Варіант 3: CLI платформи (Heroku, Fly.io тощо)
-    # heroku container:push web --app your-app-name
-
-    - echo "Deploy: SIMULATED OK ✓"
-    - echo "════════════════════════════════════════"
-
-  # environment: налаштовує деплой у GitLab Environments
-  # Зайдіть: Operate → Environments щоб побачити всі деплої
+    - echo "Deploying $APP_NAME to staging"
+    - echo "Branch $CI_COMMIT_BRANCH"
+    - echo "Commit $CI_COMMIT_SHORT_SHA"
+    - echo "Deploy SIMULATED OK"
   environment:
     name: staging
-    url: https://speaker-app.example.com   
-
+    url: https://speaker-app.example.com
   rules:
-    # Деплой ТІЛЬКИ для гілки main
     - if: '$CI_COMMIT_BRANCH == "main"'
       when: always
