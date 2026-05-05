@@ -132,10 +132,7 @@ docker_build:
     # -t → тег образу: назва:версія
     # $CI_COMMIT_SHORT_SHA → перші 8 символів SHA коміту (унікальна версія)
     # $CI_COMMIT_REF_SLUG → назва гілки (безпечна для URL, наприклад main)
-    - docker build
-        -t $APP_NAME:$CI_COMMIT_SHORT_SHA
-        -t $APP_NAME:$CI_COMMIT_REF_SLUG
-        ./speaker-app-backend
+    - docker build -t $APP_NAME:$CI_COMMIT_SHORT_SHA -t $APP_NAME:$CI_COMMIT_REF_SLUG ./speaker-app-backend
 
     # Показуємо інформацію про зібраний образ
     - docker images | grep $APP_NAME
@@ -183,7 +180,7 @@ deploy_staging:
   # Зайдіть: Operate → Environments щоб побачити всі деплої
   environment:
     name: staging
-    url: https://speaker-app.example.com   # замініть на реальний URL
+    url: https://speaker-app.example.com   
 
   rules:
     # Деплой ТІЛЬКИ для гілки main
