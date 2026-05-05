@@ -7,14 +7,22 @@
     "start": "ts-node src/app.ts",
     "build": "tsc",
     "dev": "nodemon src/app.ts",
-    "test": ""
+    "test": "cross-env NODE_ENV=test jest --forceExit",
+    "test:coverage": "cross-env NODE_ENV=test jest --coverage --forceExit"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/node": "^22.15.12",
+    "@types/supertest": "^7.2.0",
+    "cross-env": "^10.1.0",
+    "jest": "^30.3.0",
+    "mongodb-memory-server": "^11.1.0",
+    "supertest": "^7.2.2",
+    "ts-jest": "^29.4.9",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   },

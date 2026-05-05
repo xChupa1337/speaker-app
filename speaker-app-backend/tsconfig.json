@@ -5,7 +5,9 @@
     "target": "ES2024",
     "sourceMap": true,
     "outDir": "dist",
-    "moduleDetection": "force"
+    "moduleDetection": "force",
+    "esModuleInterop": true,
+    "isolatedModules": true
   },
   "include": ["src/**/*"]
 }
