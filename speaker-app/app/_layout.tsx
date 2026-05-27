@@ -2,12 +2,14 @@ import "../global.css";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { Stack } from "expo-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useColorScheme } from "react-native";
+import useTheme from "@/store/theme";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [loaded, error] = useFonts({
+  const [fontsLoaded] = useFonts({
     SF_Pro_Display_Bold: require("../assets/fonts/SF_Pro_Display_Bold.otf"),
     SF_Pro_Display_Heavy_Italic: require("../assets/fonts/SF_Pro_Display_Heavy_Italic.otf"),
     SF_Pro_Display_Light_Italic: require("../assets/fonts/SF_Pro_Display_Light_Italic.otf"),
@@ -19,15 +21,23 @@ export default function RootLayout() {
     SF_Pro_Italic: require("../assets/fonts/SF_Pro_Italic.otf"),
   });
 
+  const colorScheme = useColorScheme();
+  const { toggleTheme } = useTheme();
+
   useEffect(() => {
-    if (loaded || error) {
+    const systemTheme = colorScheme === "dark" ? "dark" : "light";
+    toggleTheme(systemTheme);
+  }, [colorScheme]);
+
+  useEffect(() => {
+    if (fontsLoaded) {
       SplashScreen.hideAsync();
     }
-  }, [loaded, error]);
+  }, [fontsLoaded]);
 
-  if (!loaded && !error) {
+  if (!fontsLoaded) {
     return null;
   }
 
-  return <Stack />;
+  return <Stack screenOptions={{ headerShown: false }} />;
 }

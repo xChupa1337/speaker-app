@@ -146,6 +146,23 @@ module.exports = {
           900: "262626",
           950: "#131313",
         },
+        "body-primary-light": "#131313",
+        "bg-light": "#fff",
+        "surfaces-light": {
+          1: "#F8F8F8",
+          2: "#E6F2FF",
+        },
+        "body-secondary-light": "#D7D7D7",
+        "border-light": "#F2F2F2",
+
+        "body-primary-dark": "#FFFFFF",
+        "bg-dark": "#131313",
+        "surfaces-dark": {
+          1: "#262626",
+          2: "#00254D",
+        },
+        "body-secondary-dark": "#4C4C4C",
+        "border-dark": "#393939",
       },
       fontFamily: {
         sf: ["SF_Pro_Display_Bold"],
