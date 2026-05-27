@@ -9,6 +9,10 @@ stages:
 
 variables:
   APP_NAME: "speaker-app-backend"
+  # Додаємо змінні для тестів (оскільки .env.test.local не пушиться в гіт)
+  BASE_URL: "/api/v1"
+  JWT_SECRET: "test-jwt-secret-for-testing-only-not-production"
+  PORT: "3001"
 
 cache:
   key: "$CI_COMMIT_REF_SLUG"
