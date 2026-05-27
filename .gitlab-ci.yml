@@ -18,14 +18,13 @@ cache:
 # Stage: BUILD
 node_build:
   stage: build
-  image: node:20-alpine
   tags:
     - student
   script:
     - cd speaker-app-backend
     - npm ci
     - npm run build
-    - ls -la dist/
+    - dir dist
   artifacts:
     paths:
       - speaker-app-backend/dist/
@@ -38,7 +37,6 @@ node_build:
 # Stage: TEST - unit and integration tests with coverage
 node_test:
   stage: test
-  image: node:20-alpine
   tags:
     - student
   dependencies:
@@ -64,7 +62,6 @@ node_test:
 # Stage: TEST - TypeScript type checking
 node_lint:
   stage: test
-  image: node:20-alpine
   tags:
     - student
   dependencies:
@@ -78,23 +75,13 @@ node_lint:
     - if: "$CI_COMMIT_BRANCH"
       when: always
 
-# Stage: DOCKER - build Docker image
+# Stage: DOCKER - build Docker image (Skipped for shell executor)
 docker_build:
   stage: docker
-  image: docker:27
-  services:
-    - docker:27-dind
   tags:
     - student
-  variables:
-    DOCKER_HOST: tcp://docker:2376
-    DOCKER_TLS_CERTDIR: "/certs"
-    DOCKER_TLS_VERIFY: 1
-    DOCKER_CERT_PATH: "/certs/client"
   script:
-    - docker build -t $APP_NAME:$CI_COMMIT_SHORT_SHA ./speaker-app-backend
-    - docker images | grep $APP_NAME
-    - echo "Docker image built successfully"
+    - echo "Skipping Docker build because we are using shell executor"
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
       when: always
@@ -104,7 +91,6 @@ docker_build:
 # Stage: DEPLOY - simulated deploy (only for main branch)
 deploy_staging:
   stage: deploy
-  image: alpine:latest
   tags:
     - student
   script:
