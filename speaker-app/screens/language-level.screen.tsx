@@ -24,7 +24,8 @@ const LanguageLevelScreen = () => {
   const handleSheetChanges = useCallback((index: number) => {
     console.log("handleSheetChanges", index);
   }, []);
-
+  const buttonStyle =
+    "mx-4 justify-center items-center py-3 rounded-[12px] pressed:opacity-80";
   const handleOpenSheet = () => {
     bottomSheetRef.current?.expand();
   };
@@ -127,10 +128,10 @@ const LanguageLevelScreen = () => {
 
           <Button
             onPress={handlePress}
-            className={
+            fullCustomClassName={
               selectedLanguageLevel
-                ? ""
-                : `${isDarkMode ? "bg-body-secondary-dark" : "bg-body-secondary-light"}`
+                ? `${buttonStyle} bg-primary`
+                : `${isDarkMode ? "bg-body-secondary-dark" : "bg-body-secondary-light"} ${buttonStyle}`
             }
             textClassName={
               selectedLanguageLevel
