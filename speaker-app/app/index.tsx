@@ -4,6 +4,7 @@ export default function Index() {
   const [isAuthUser, setIsAuthUser] = useState(false);
 
   if (!isAuthUser) return <Redirect href="/onboarding/welcome" />;
+  if (isAuthUser) return <Redirect href="/auth/select-language" />;
 
   return <></>;
 }
