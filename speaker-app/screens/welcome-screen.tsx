@@ -10,8 +10,15 @@ import {
 import useTheme from "@/store/theme";
 import Button from "@/components/ui/button";
 import { router } from "expo-router";
-import useChangeTheme from "@/hooks/useChangeTheme";
 import ChangeThemeButton from "@/components/share/change-theme-button";
+import {
+  LogoTextDarkOnBoard,
+  LogoTextLightOnBoard,
+} from "@/assets/images/logo/logo";
+import {
+  HelloImgDark,
+  HelloImgLight,
+} from "@/assets/images/onboarding/hello_img";
 
 const WelcomeScreen = () => {
   const { height, width } = useWindowDimensions();
@@ -28,31 +35,9 @@ const WelcomeScreen = () => {
       <View className="items-center justify-center flex-1">
         <View className="items-center relative w-full">
           <View className="absolute z-10 -top-8">
-            {isDarkMode ? (
-              <Image
-                resizeMode="contain"
-                source={require("@/assets/images/logo/Logo 48_48_dark.png")}
-              />
-            ) : (
-              <Image
-                resizeMode="contain"
-                source={require("@/assets/images/logo/Logo 48_48_light.png")}
-              />
-            )}
+            {isDarkMode ? <LogoTextLightOnBoard /> : <LogoTextDarkOnBoard />}
           </View>
-          {isDarkMode ? (
-            <Image
-              resizeMode="cover"
-              style={{ width: "100%", height: height * 0.5 }}
-              source={require("@/assets/images/onboarding/hello_Illustraton_dark.png")}
-            />
-          ) : (
-            <Image
-              resizeMode="cover"
-              style={{ width: "100%", height: height * 0.5 }}
-              source={require("@/assets/images/onboarding/Hello_Illustraton.png")}
-            />
-          )}
+          {isDarkMode ? <HelloImgDark /> : <HelloImgLight />}
         </View>
         <View className="mt-5 max-w-80">
           <Text
