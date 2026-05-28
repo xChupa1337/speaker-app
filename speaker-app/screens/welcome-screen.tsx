@@ -41,7 +41,7 @@ const WelcomeScreen = () => {
         </View>
         <View className="mt-5 max-w-80">
           <Text
-            className={` text-headline-medium ${isDarkMode ? "text-body-primary-dark" : "text-body-primary-light "}`}
+            className={`text-headline-medium ${isDarkMode ? "text-body-primary-dark" : "text-body-primary-light "}`}
             style={{ textAlign: "center" }}
           >
             Learn a language in 3 minutes a day
