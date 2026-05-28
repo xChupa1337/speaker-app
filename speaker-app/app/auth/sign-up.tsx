@@ -1,8 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import EmailAuthFormScreen from "@/screens/email-auth-form.screen";
+import useAuthStore from "@/store/auth";
 
 const SignUp = () => {
-  return <EmailAuthFormScreen isLogin={false} />;
+  const { setIsLogin } = useAuthStore();
+  useEffect(() => {
+    setIsLogin(false);
+  }, []);
+  return <EmailAuthFormScreen />;
 };
 
 export default SignUp;
