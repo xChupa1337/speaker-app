@@ -1,12 +1,8 @@
-import React from 'react';
-import {Text, View} from "react-native";
+import React from "react";
+import VocabularyScreen from "@/screens/app/vocabulary.screen";
 
 const Vocabulary = () => {
-    return (
-        <View>
-            <Text>Vocabulary</Text>
-        </View>
-    );
+  return <VocabularyScreen />;
 };
 
 export default Vocabulary;
