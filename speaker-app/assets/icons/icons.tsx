@@ -1284,3 +1284,83 @@ export function SearchIcon({
     </Svg>
   );
 }
+
+export const ProgressChartIcon = ({
+  isDark,
+  ...props
+}: {
+  isDark?: boolean;
+  props?: any;
+}) => {
+  return (
+    <Svg
+      width={20}
+      height={20}
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <Path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M12 3a3 3 0 013-3h2a3 3 0 013 3v14a3 3 0 01-3 3h-2c-.768 0-1.47-.289-2-.764A2.989 2.989 0 0111 20H9c-.768 0-1.47-.289-2-.764A2.989 2.989 0 015 20H3a3 3 0 01-3-3v-6a3 3 0 013-3h2c.35 0 .687.06 1 .17V7a3 3 0 013-3h2c.35 0 .687.06 1 .17V3zm2 14a1 1 0 001 1h2a1 1 0 001-1V3a1 1 0 00-1-1h-2a1 1 0 00-1 1v14zM12 7a1 1 0 00-1-1H9a1 1 0 00-1 1v10a1 1 0 001 1h2a1 1 0 001-1V7zm-6 4a1 1 0 00-1-1H3a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6z"
+        fill={isDark ? "#fff" : "#131313"}
+      />
+    </Svg>
+  );
+};
+
+export const ProgressChartActiveIcon = ({
+  isDark,
+  ...props
+}: {
+  isDark?: boolean;
+  props?: any;
+}) => {
+  return (
+    <Svg
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <Path fill={isDark ? "#fff" : "#131313"} d="M3 12H9V20H3z" />
+      <Path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M14 5a3 3 0 013-3h2a3 3 0 013 3v14a3 3 0 01-3 3h-2c-.768 0-1.47-.289-2-.764A2.989 2.989 0 0113 22h-2c-.768 0-1.47-.289-2-.764A2.989 2.989 0 017 22H5a3 3 0 01-3-3v-6a3 3 0 013-3h2c.35 0 .687.06 1 .17V9a3 3 0 013-3h2c.35 0 .687.06 1 .17V5zm2 14a1 1 0 001 1h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v14zM14 9a1 1 0 00-1-1h-2a1 1 0 00-1 1v10a1 1 0 001 1h2a1 1 0 001-1V9zm-6 4a1 1 0 00-1-1H5a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6z"
+        fill={isDark ? "#fff" : "#131313"}
+      />
+    </Svg>
+  );
+};
+
+export const ArrowDown = ({
+  isDark,
+  ...props
+}: {
+  isDark?: boolean;
+  props?: any;
+}) => {
+  return (
+    <Svg
+      width={16}
+      height={10}
+      viewBox="0 0 16 10"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <Path
+        d="M15 1.5l-7 7-7-7"
+        stroke={isDark ? "#fff" : "#131313"}
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  );
+};

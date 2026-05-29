@@ -6,6 +6,7 @@ interface ButtonProps extends PressableProps {
   className?: string;
   textClassName?: string;
   fullCustomClassName?: string;
+  fullCustomTextClassName?: string;
 }
 
 const Button = ({
@@ -13,6 +14,7 @@ const Button = ({
   className,
   textClassName,
   fullCustomClassName,
+  fullCustomTextClassName,
   ...rest
 }: ButtonProps) => {
   return (
@@ -25,7 +27,11 @@ const Button = ({
       }
     >
       <Text
-        className={`text-title-large text-body-primary-dark ${textClassName ?? ""}`}
+        className={
+          fullCustomTextClassName
+            ? fullCustomTextClassName
+            : `text-title-large text-body-primary-dark ${textClassName ?? ""}`
+        }
       >
         {children}
       </Text>
