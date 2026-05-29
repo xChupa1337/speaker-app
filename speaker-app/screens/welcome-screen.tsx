@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Image,
-  Pressable,
-  SafeAreaView,
-  Text,
-  useWindowDimensions,
-  View,
-} from "react-native";
+import { Pressable, SafeAreaView, Text, View } from "react-native";
 import useTheme from "@/store/theme";
 import Button from "@/components/ui/button";
 import { router } from "expo-router";
@@ -21,7 +14,6 @@ import {
 } from "@/assets/images/onboarding/hello_img";
 
 const WelcomeScreen = () => {
-  const { height, width } = useWindowDimensions();
   const { isDarkMode } = useTheme();
 
   return (

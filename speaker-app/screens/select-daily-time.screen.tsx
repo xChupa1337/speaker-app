@@ -5,6 +5,7 @@ import OnBoardingTitle from "@/components/share/on-boarding-title";
 import DailyTimePicker from "@/components/share/daily-time-picker";
 import Button from "@/components/ui/button";
 import { minutesVariants } from "@/constans";
+import { router } from "expo-router";
 
 const SelectDailyTimeScreen = () => {
   const { isDarkMode } = useTheme();
@@ -31,7 +32,7 @@ const SelectDailyTimeScreen = () => {
         />
       </View>
       <View style={{ marginBottom: 15 }}>
-        <Button>
+        <Button onPress={() => router.replace("/(tabs)/book")}>
           Continue (
           <Text className="font-semibold">{minutesVariants[activeIndex]}</Text>{" "}
           min/day)
