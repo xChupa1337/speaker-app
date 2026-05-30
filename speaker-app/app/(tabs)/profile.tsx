@@ -1,10 +1,8 @@
-import React from 'react';
+import React from "react";
+import ProfileScreen from "@/screens/app/profile.screen";
 
 const Profile = () => {
-    return (
-        <>
-        </>
-    );
+  return <ProfileScreen />;
 };
 
 export default Profile;
