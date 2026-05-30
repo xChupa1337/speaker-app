@@ -1,5 +1,12 @@
 import React from "react";
-import { Alert, ScrollView, Text, View } from "react-native";
+import {
+  ScrollView,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  View,
+  Text,
+  Alert,
+} from "react-native";
 import useTheme from "@/store/theme";
 import {
   FiendFriendsDark,
@@ -7,16 +14,19 @@ import {
 } from "@/assets/images/onboarding/hello_img";
 import Button from "@/components/ui/button";
 
-const ChatFriendScreen = () => {
+type Props = {
+  onScroll: (e: NativeSyntheticEvent<NativeScrollEvent>) => void;
+};
+
+const ChatFriendScreen: React.FC<Props> = ({ onScroll }) => {
   const { isDarkMode } = useTheme();
+
   const handlePress = () => {
-    Alert.alert(
-      "Oops...",
-      "Sorry, adding friends is not available yet. Stay tuned for updates!",
-    );
+    Alert.alert("Oops...", "Sorry, adding friends is not available yet.");
   };
+
   return (
-    <ScrollView className="pt-6">
+    <ScrollView onScroll={onScroll} scrollEventThrottle={16} className="pt-6">
       {isDarkMode ? <FiendFriendsDark /> : <FiendFriendsLight />}
       <View className="mt-5 gap-4">
         <Text
