@@ -4,6 +4,7 @@ import useTheme from "@/store/theme";
 import AppHeader from "@/components/share/app-header";
 import TabChatItem from "@/components/share/tab-chat-item";
 import ChatFriendScreen from "@/screens/app/chat/chat-friend.screen";
+import ChatExploreScreen from "@/screens/app/chat/chat-explore.screen";
 
 const ChatScreen = () => {
   const { isDarkMode } = useTheme();
@@ -31,9 +32,12 @@ const ChatScreen = () => {
           onPress={() => setCurrentChatScreen("friends")}
         />
       </View>
-
-      <View className="px-6">
-        {currentChatScreen === "friends" ? <ChatFriendScreen /> : null}
+      <View className="flex-1 px-6">
+        {currentChatScreen === "friends" ? (
+          <ChatFriendScreen />
+        ) : (
+          <ChatExploreScreen />
+        )}
       </View>
     </SafeAreaView>
   );

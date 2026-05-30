@@ -8,6 +8,12 @@ import {
   UKFlag,
 } from "@/assets/icons/icons";
 
+export type todayTaskType = {
+  title: string;
+  count: number;
+  type: "answer" | "image" | "record";
+};
+
 export const availableLanguages = [
   { name: "English", flag: <UKFlag /> },
   { name: "French", flag: <FranceFlag /> },
@@ -99,4 +105,10 @@ export const vocabularyDummyData = [
     imgUri:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRygUXIN2VtDCXCJ1M0cA3DjeLHG4GfnpSwLA&s",
   },
+];
+
+export const dummyTodayTasks: todayTaskType[] = [
+  { title: "Answer using English", count: 5, type: "answer" },
+  { title: "Describe the image", count: 2, type: "image" },
+  { title: "Record an audio message", count: 3, type: "record" },
 ];
