@@ -78,6 +78,7 @@ export const lessonData = [
     lessonData: [
       {
         title: "About the lesson",
+        isQuestion: false,
         lessonData: [
           {
             type: "video",
@@ -87,6 +88,7 @@ export const lessonData = [
       },
       {
         title: "Finish the sentences",
+        isQuestion: true,
         correctText:
           'Correct! In the US, people say "on vacation", while in the UK, they usually say "on holiday". Well done!',
         wrongText:
@@ -109,6 +111,7 @@ export const lessonData = [
       },
       {
         title: "Is the sentence written correctly?",
+        isQuestion: true,
         correctText:
           'Correct! In the US, people say "on vacation", while in the UK, they usually say "on holiday". Well done!',
         wrongText:
@@ -136,6 +139,7 @@ export const lessonData = [
     lessonData: [
       {
         title: "About the lesson",
+        isQuestion: false,
         lessonData: [
           {
             type: "video",
@@ -145,6 +149,7 @@ export const lessonData = [
       },
       {
         title: "Finish the sentences",
+        isQuestion: true,
         correctText:
           'Correct! In the UK, "at the weekend" is commonly used. Great job!',
         wrongText:
@@ -167,6 +172,7 @@ export const lessonData = [
       },
       {
         title: "Is the sentence written correctly?",
+        isQuestion: true,
         correctText:
           'Correct! Americans often say "on the weekend". Good catch!',
         wrongText:
@@ -193,6 +199,7 @@ export const lessonData = [
     lessonData: [
       {
         title: "About the lesson",
+        isQuestion: false,
         lessonData: [
           {
             type: "video",
@@ -202,6 +209,7 @@ export const lessonData = [
       },
       {
         title: "Finish the sentences",
+        isQuestion: true,
         correctText:
           'Correct! In British English, it’s "at university". Well done!',
         wrongText:
@@ -224,6 +232,7 @@ export const lessonData = [
       },
       {
         title: "Is the sentence written correctly?",
+        isQuestion: true,
         correctText:
           "Correct! That sentence uses British English accurately. Good job!",
         wrongText:
