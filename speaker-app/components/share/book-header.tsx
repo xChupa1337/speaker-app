@@ -16,7 +16,7 @@ const BookHeader = () => {
         <View className="flex-row gap-2 items-center">
           <FireIcon isDark={isDarkMode} />
           <Text
-            className={`${isDarkMode ? "text-bg-light" : "text-bg-dark"} text-body-large`}
+            className={`${isDarkMode ? "text-bg-light" : "text-bg-dark"} text-[19px]`}
           >
             0
           </Text>
@@ -24,7 +24,7 @@ const BookHeader = () => {
         <View className="flex-row gap-2 items-center">
           <StarIcon isDark={isDarkMode} />
           <Text
-            className={`${isDarkMode ? "text-bg-light" : "text-bg-dark"} text-body-large`}
+            className={`${isDarkMode ? "text-bg-light" : "text-bg-dark"} text-[19px]`}
           >
             0 / 20
           </Text>

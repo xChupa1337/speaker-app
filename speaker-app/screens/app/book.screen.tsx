@@ -1,10 +1,17 @@
 import React, { useMemo, useRef } from "react";
 import useTheme from "@/store/theme";
-import { Pressable, SafeAreaView, ScrollView, Text, View } from "react-native";
+import {
+  Image,
+  Pressable,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 import BookHeader from "@/components/share/book-header";
 import OnBoardingTitle from "@/components/share/on-boarding-title";
 import UserProgress from "@/components/share/user-progress";
-import { DiscountIcon, MarkIcon } from "@/assets/icons/icons";
+import { DiscountIcon, LockIcon, MarkIcon } from "@/assets/icons/icons";
 import Chapter from "@/components/share/chapter";
 import OffersButton from "@/components/share/offers-button";
 import BottomSheet from "@gorhom/bottom-sheet";
@@ -12,6 +19,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import ChapterCardBottomSheet from "@/components/share/chapter-card-bottom-sheet";
 import useCurrentChapterItem from "@/store/selected-chapter";
 import ShimmerButton from "@/components/share/shimmer-button";
+import InstaStories from "@/components/share/insta-stories";
 
 const BookScreen = () => {
   const { isDarkMode } = useTheme();
@@ -57,6 +65,15 @@ const BookScreen = () => {
               title="Try Premium For Free"
               bgIcon={<DiscountIcon />}
             />
+          </View>
+
+          <View className="mt-7 gap-4">
+            <Text
+              className={`${isDarkMode ? "text-bg-light" : "text-bg-dark"} text-title-medium`}
+            >
+              Your Stories ❤️
+            </Text>
+            <InstaStories isDarkMode={isDarkMode} />
           </View>
 
           <Chapter

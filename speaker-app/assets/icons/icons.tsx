@@ -1011,8 +1011,8 @@ export const FireIcon = ({
 }) => {
   return (
     <Svg
-      width={18}
-      height={20}
+      width={15}
+      height={17}
       viewBox="0 0 18 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -1037,8 +1037,8 @@ export const StarIcon = ({
 }) => {
   return (
     <Svg
-      width={20}
-      height={20}
+      width={17}
+      height={17}
       viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -1063,8 +1063,8 @@ export const BellIcon = ({
 }) => {
   return (
     <Svg
-      width={18}
-      height={20}
+      width={17}
+      height={17}
       viewBox="0 0 18 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
