@@ -184,7 +184,7 @@ export const lessonData = [
           {
             type: "video",
             videoUri:
-              "https://ia801404.us.archive.org/23/items/grammar-bootcamp/04%20Re%20Phrasing.mp4",
+              "https://videos.pexels.com/video-files/8135343/8135343-hd_1920_1080_25fps.mp4",
           },
         ],
       },
@@ -199,7 +199,7 @@ export const lessonData = [
           {
             type: "video",
             videoUri:
-              "https://ia601404.us.archive.org/23/items/grammar-bootcamp/05%20Fewer%20Octopuses%20Or%20Less%20Octopi.mp4",
+              "https://videos.pexels.com/video-files/8808484/8808484-hd_1920_1080_25fps.mp4",
           },
           {
             type: "sentence",
@@ -223,7 +223,7 @@ export const lessonData = [
           {
             type: "video",
             videoUri:
-              "https://ia601404.us.archive.org/23/items/grammar-bootcamp/05%20Fewer%20Octopuses%20Or%20Less%20Octopi.mp4",
+              "https://videos.pexels.com/video-files/1654216/1654216-hd_1920_1080_30fps.mp4",
           },
           {
             type: "sentence",
@@ -247,7 +247,7 @@ export const lessonData = [
           {
             type: "video",
             videoUri:
-              "https://ia601404.us.archive.org/23/items/grammar-bootcamp/05%20Fewer%20Octopuses%20Or%20Less%20Octopi.mp4",
+              "https://videos.pexels.com/video-files/7205257/7205257-uhd_2560_1440_25fps.mp4",
           },
         ],
       },
@@ -262,7 +262,7 @@ export const lessonData = [
           {
             type: "video",
             videoUri:
-              "https://ia601404.us.archive.org/23/items/grammar-bootcamp/05%20Fewer%20Octopuses%20Or%20Less%20Octopi.mp4",
+              "https://videos.pexels.com/video-files/855488/855488-uhd_2560_1440_30fps.mp4",
           },
           {
             type: "sentence",
@@ -286,7 +286,7 @@ export const lessonData = [
           {
             type: "video",
             videoUri:
-              "https://ia601404.us.archive.org/23/items/grammar-bootcamp/05%20Fewer%20Octopuses%20Or%20Less%20Octopi.mp4",
+              "https://videos.pexels.com/video-files/7205261/7205261-uhd_2560_1440_25fps.mp4",
           },
           {
             type: "sentence",
