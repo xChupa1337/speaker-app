@@ -28,6 +28,7 @@ export default function RootLayout() {
   useEffect(() => {
     async function prepare() {
       const userTheme = await AsyncStorage.getItem("appTheme");
+      console.log(userTheme);
       if (!userTheme) {
         console.log("NO USER THEME :(");
         const theme = colorScheme === "dark" ? "dark" : "light";
@@ -39,8 +40,8 @@ export default function RootLayout() {
       }
     }
 
-    prepare();
-  }, [colorScheme]);
+    prepare().then();
+  }, []);
 
   useEffect(() => {
     if (fontsLoaded) {

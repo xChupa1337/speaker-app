@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type useThemeType = {
   isDarkMode: boolean;
@@ -7,11 +8,13 @@ type useThemeType = {
 
 const useTheme = create<useThemeType>((set) => ({
   isDarkMode: false,
-  toggleTheme: (theme) => {
-    if (theme === "dark") {
-      set({ isDarkMode: true });
-    } else {
-      set({ isDarkMode: false });
+  toggleTheme: async (theme) => {
+    const isDark = theme === "dark";
+    set({ isDarkMode: isDark });
+    try {
+      await AsyncStorage.setItem("appTheme", isDark ? "dark" : "light");
+    } catch (e) {
+      console.warn("Error with toogle theme:", e);
     }
   },
 }));
