@@ -39,6 +39,13 @@
         {
           "fonts": ["./assets/fonts/SF_Pro_Display_Medium.otf"]
         }
+      ],
+      [
+        "expo-video",
+        {
+          "supportsBackgroundPlayback": true,
+          "supportsPictureInPicture": true
+        }
       ]
     ],
     "experiments": {

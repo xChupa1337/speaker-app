@@ -82,7 +82,27 @@ export const lessonData = [
         lessonData: [
           {
             type: "video",
-            videoUri: "https://www.youtube.com/watch?v=2SfQzU7rY8A",
+            videoUri: "https://assets.mixkit.co/videos/4834/4834-720.mp4",
+          },
+        ],
+      },
+      {
+        title: "Finish the sentences",
+        isQuestion: true,
+        correctText:
+          "Correct! In the US, people say 'on vacation', while in the UK, they usually say 'on holiday'. Well done!",
+        wrongText:
+          "Oops, that’s not quite right. The correct answer is 'on vacation'. In the US, that’s the usual phrase. Try again!",
+        lessonData: [
+          {
+            type: "sentence",
+            textData:
+              "People in the US might ask: Are you going '_______' this summer?",
+            variants: [
+              { question: "on vacation", correct: true },
+              { question: "on holiday", correct: false },
+              { question: "in vacation", correct: false },
+            ],
           },
         ],
       },
@@ -96,7 +116,7 @@ export const lessonData = [
         lessonData: [
           {
             type: "video",
-            videoUri: "https://www.youtube.com/watch?v=2SfQzU7rY8A",
+            videoUri: "https://assets.mixkit.co/videos/4863/4863-720.mp4",
           },
           {
             type: "sentence",
@@ -105,6 +125,26 @@ export const lessonData = [
             variants: [
               { question: "on vacation", correct: true },
               { question: "in vacation", correct: false },
+            ],
+          },
+        ],
+      },
+      {
+        title: "Finish the sentences",
+        isQuestion: true,
+        correctText:
+          "Correct! In the US, people say 'on vacation', while in the UK, they usually say 'on holiday'. Well done!",
+        wrongText:
+          "Oops, that’s not quite right. The correct answer is 'on vacation'. In the US, that’s the usual phrase. Try again!",
+        lessonData: [
+          {
+            type: "sentence",
+            textData:
+              "In the UK, when someone is taking a break, they often say '_________', while in the US, 'on vacation' is the common term.",
+            variants: [
+              { question: "on holiday", correct: true },
+              { question: "in holiday", correct: false },
+              { question: "on leave", correct: false },
             ],
           },
         ],
@@ -119,7 +159,7 @@ export const lessonData = [
         lessonData: [
           {
             type: "video",
-            videoUri: "https://www.youtube.com/watch?v=2SfQzU7rY8A",
+            videoUri: "https://assets.mixkit.co/videos/4834/4834-720.mp4",
           },
           {
             type: "sentence",
@@ -143,7 +183,8 @@ export const lessonData = [
         lessonData: [
           {
             type: "video",
-            videoUri: "https://www.youtube.com/watch?v=1n5RPQZtC14",
+            videoUri:
+              "https://ia801404.us.archive.org/23/items/grammar-bootcamp/04%20Re%20Phrasing.mp4",
           },
         ],
       },
@@ -157,7 +198,8 @@ export const lessonData = [
         lessonData: [
           {
             type: "video",
-            videoUri: "https://www.youtube.com/watch?v=1n5RPQZtC14",
+            videoUri:
+              "https://ia601404.us.archive.org/23/items/grammar-bootcamp/05%20Fewer%20Octopuses%20Or%20Less%20Octopi.mp4",
           },
           {
             type: "sentence",
@@ -180,7 +222,8 @@ export const lessonData = [
         lessonData: [
           {
             type: "video",
-            videoUri: "https://www.youtube.com/watch?v=1n5RPQZtC14",
+            videoUri:
+              "https://ia601404.us.archive.org/23/items/grammar-bootcamp/05%20Fewer%20Octopuses%20Or%20Less%20Octopi.mp4",
           },
           {
             type: "sentence",
@@ -203,7 +246,8 @@ export const lessonData = [
         lessonData: [
           {
             type: "video",
-            videoUri: "https://www.youtube.com/watch?v=5Z1QWZIQV1o",
+            videoUri:
+              "https://ia601404.us.archive.org/23/items/grammar-bootcamp/05%20Fewer%20Octopuses%20Or%20Less%20Octopi.mp4",
           },
         ],
       },
@@ -217,7 +261,8 @@ export const lessonData = [
         lessonData: [
           {
             type: "video",
-            videoUri: "https://www.youtube.com/watch?v=5Z1QWZIQV1o",
+            videoUri:
+              "https://ia601404.us.archive.org/23/items/grammar-bootcamp/05%20Fewer%20Octopuses%20Or%20Less%20Octopi.mp4",
           },
           {
             type: "sentence",
@@ -240,7 +285,8 @@ export const lessonData = [
         lessonData: [
           {
             type: "video",
-            videoUri: "https://www.youtube.com/watch?v=5Z1QWZIQV1o",
+            videoUri:
+              "https://ia601404.us.archive.org/23/items/grammar-bootcamp/05%20Fewer%20Octopuses%20Or%20Less%20Octopi.mp4",
           },
           {
             type: "sentence",

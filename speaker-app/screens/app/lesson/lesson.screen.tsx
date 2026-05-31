@@ -70,7 +70,12 @@ const LessonScreen = () => {
               {lesson[0].lessonData[currentPage].lessonData.map(
                 (lesson: any, index: number) => {
                   if (lesson.type === "video") {
-                    return <LessonVideoPlayer key={index} />;
+                    return (
+                      <LessonVideoPlayer
+                        videoSource={lesson.videoUri}
+                        key={index}
+                      />
+                    );
                   } else if (lesson.type === "sentence") {
                     return (
                       <LessonSentence
