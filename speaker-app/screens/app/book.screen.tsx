@@ -20,12 +20,13 @@ const BookScreen = () => {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const aiBottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ["50%"], []);
-  const { title, progress, isLock, description, imgUri } =
+  const { title, progress, isLock, description, imgUri, id } =
     useCurrentChapterItem();
   const handleOpenSheet = () => {
     if (
       title !== undefined &&
       imgUri !== undefined &&
+      id !== undefined &&
       description !== undefined &&
       progress !== undefined
     )
@@ -93,6 +94,7 @@ const BookScreen = () => {
           snapPoints={snapPoints}
           isDarkMode={isDarkMode}
           title={title}
+          id={id}
           description={description}
           imgUri={imgUri}
           isLock={isLock}

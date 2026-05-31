@@ -5,6 +5,7 @@ import { ChapterItemType } from "@/store/selected-chapter";
 import Button from "@/components/ui/button";
 import UserProgress from "@/components/share/user-progress";
 import { MarkIcon } from "@/assets/icons/icons";
+import { useRouter } from "expo-router";
 
 export interface ChapterCardBottomSheetProps extends ChapterItemType {
   bottomSheetRef: RefObject<BottomSheet>;
@@ -17,12 +18,22 @@ const ChapterCardBottomSheet = ({
   isDarkMode,
   snapPoints,
   isLock,
+  id,
   progress,
   description,
   imgUri,
   title,
 }: ChapterCardBottomSheetProps) => {
   const isActive = false;
+  const router = useRouter();
+  const handlePress = () => {
+    router.push({
+      pathname: "/lesson/lesson",
+      params: {
+        id: id,
+      },
+    });
+  };
   return (
     <BottomSheet
       ref={bottomSheetRef}
@@ -89,7 +100,7 @@ const ChapterCardBottomSheet = ({
           </Text>
         </ScrollView>
         <View className="mb-2">
-          <Button className={isLock ? "bg-netural" : ""}>
+          <Button onPress={handlePress} className={isLock ? "bg-netural" : ""}>
             🚀 Start lesson
           </Button>
         </View>

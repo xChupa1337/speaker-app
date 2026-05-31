@@ -8,6 +8,7 @@ import useCurrentChapterItem from "@/store/selected-chapter";
 const ChapterCard = ({
   title,
   imgUri,
+  id,
   isActive,
   isLast,
   isLock,
@@ -15,6 +16,7 @@ const ChapterCard = ({
 }: {
   title: string;
   imgUri: string;
+  id: string;
   isActive: boolean;
   isLast: boolean;
   isLock?: boolean;
@@ -32,6 +34,7 @@ const ChapterCard = ({
     setChapterItem({
       title: title,
       imgUri: imgUri,
+      id: id,
       progress: 45,
       isLock: false,
       description:

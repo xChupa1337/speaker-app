@@ -46,6 +46,7 @@ const Chapter = ({
           title={item.title}
           imgUri={item.imgUri}
           isLock={isLock}
+          id={item.id}
           isActive={isLock ? index === 0 : index === 1}
           isLast={index === chapterDummyData.length - 1}
           onPress={onCardPress}
