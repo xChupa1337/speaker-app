@@ -54,7 +54,7 @@ const ProfileScreen = () => {
         </View>
         <View className="px-5">
           <View
-            className={`w-full h-[2px] my-6 ${isDarkMode ? "bg-surfaces-dark-1" : "bg-surfaces-light-1"}`}
+            className={`w-full h-[2px] mt-6 mb-4 ${isDarkMode ? "bg-surfaces-dark-1" : "bg-surfaces-light-1"}`}
           />
         </View>
         <ProfileScreenBody isDarkMode={isDarkMode} />
