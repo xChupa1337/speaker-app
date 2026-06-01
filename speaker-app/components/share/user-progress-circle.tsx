@@ -7,7 +7,7 @@ import {
   UKFlag,
 } from "@/assets/icons/icons";
 import InfoCard from "@/components/share/info-card";
-import { UserProgressType } from "@/constans";
+import { UserProgressType } from "../../constants";
 
 interface UserProgressCircleProps extends UserProgressType {
   isDarkMode: boolean;

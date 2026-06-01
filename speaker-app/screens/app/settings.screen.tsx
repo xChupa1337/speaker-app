@@ -3,7 +3,7 @@ import { SafeAreaView, ScrollView, View, Text, Pressable } from "react-native";
 import useTheme from "@/store/theme";
 import SettingsHeaderComponent from "@/components/share/settings-header";
 import SettingsList from "@/components/share/settings-list";
-import { settingsListItems } from "@/constans";
+import { settingsListItems } from "../../constants";
 import Button from "@/components/ui/button";
 import OffersButton from "@/components/share/offers-button";
 import { DiscountIcon } from "@/assets/icons/icons";
