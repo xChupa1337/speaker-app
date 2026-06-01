@@ -12,26 +12,29 @@ const SelectLanguageScreen = () => {
   const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
 
   useEffect(() => {
-    const onBackPress = () => {
-      return true;
-    };
-    BackHandler.addEventListener("hardwareBackPress", onBackPress);
+    const onBackPress = () => true;
+
+    const subscription = BackHandler.addEventListener(
+      "hardwareBackPress",
+      onBackPress,
+    );
+
     return () => {
-      BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+      subscription?.remove?.();
     };
   }, []);
 
   const handlePress = (language: string) => {
-    if (language === selectedLanguage) {
-      setSelectedLanguage(null);
-      return;
-    }
-    setSelectedLanguage(language);
+    setSelectedLanguage((prev) => (prev === language ? null : language));
   };
 
   const handleConfirmPress = () => {
-    router.navigate("/auth/language-level");
+    if (selectedLanguage === "English") {
+      router.navigate("/auth/language-level");
+    }
   };
+
+  const isAvailable = selectedLanguage === "English";
 
   return (
     <View
@@ -39,6 +42,7 @@ const SelectLanguageScreen = () => {
     >
       <View className="px-5 w-full flex-1 gap-2">
         <OnBoardingTitle>Choose the language you want to learn</OnBoardingTitle>
+
         <FlatList
           data={availableLanguages}
           renderItem={({ item }) => (
@@ -52,13 +56,16 @@ const SelectLanguageScreen = () => {
           keyExtractor={(item) => item.name}
         />
       </View>
+
       {selectedLanguage && (
         <View className="w-full px-1 py-2">
-          {selectedLanguage === "English" ? (
-            <Button onPress={handleConfirmPress}>Continue</Button>
-          ) : (
-            <Button className="bg-red">Not available</Button>
-          )}
+          <Button
+            onPress={handleConfirmPress}
+            className={isAvailable ? "" : "bg-red"}
+            disabled={!isAvailable}
+          >
+            {isAvailable ? "Continue" : "Not Available Yet"}
+          </Button>
         </View>
       )}
     </View>

@@ -1,23 +1,24 @@
 import React from "react";
 import { Text, View } from "react-native";
 import useTheme from "@/store/theme";
-import { chapterDummyData } from "@/constans";
 import ChapterCard from "@/components/share/chapter-card";
 import ChapterTestCard from "@/components/share/chapter-test-card";
+import { Topic } from "@/types/topic.types";
 
 const Chapter = ({
   chapterTitle,
   chapterName,
   isLock,
   onCardPress,
+  topics,
 }: {
   chapterTitle: string;
   chapterName: string;
   isLock?: boolean;
   onCardPress: () => void;
+  topics: Topic[];
 }) => {
   const { isDarkMode } = useTheme();
-
   return (
     <View className="my-10 gap-5">
       <View className="flex-row justify-between items-center">
@@ -40,15 +41,16 @@ const Chapter = ({
         <Text className="text-primary text-body-medium">0/5</Text>
       </View>
 
-      {chapterDummyData.map((item, index) => (
+      {topics.map((topic, index) => (
         <ChapterCard
           key={index + chapterTitle}
-          title={item.title}
-          imgUri={item.imgUri}
+          title={topic.title}
+          imgUri={topic.imgUri}
           isLock={isLock}
-          id={item.id}
+          id={topic._id}
+          description={topic.description}
           isActive={isLock ? index === 0 : index === 1}
-          isLast={index === chapterDummyData.length - 1}
+          isLast={index === topics.length - 1}
           onPress={onCardPress}
         />
       ))}

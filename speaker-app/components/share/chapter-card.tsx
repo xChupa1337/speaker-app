@@ -4,6 +4,14 @@ import useTheme from "@/store/theme";
 import { LockIcon, MarkIcon } from "@/assets/icons/icons";
 import { LinearGradient } from "expo-linear-gradient";
 import useCurrentChapterItem from "@/store/selected-chapter";
+import { Topic } from "@/types/topic.types";
+
+interface ChapterCardProps extends Topic {
+  isActive: boolean;
+  isLast: boolean;
+  isLock?: boolean;
+  onPress: () => void;
+}
 
 const ChapterCard = ({
   title,
@@ -13,15 +21,8 @@ const ChapterCard = ({
   isLast,
   isLock,
   onPress,
-}: {
-  title: string;
-  imgUri: string;
-  id: string;
-  isActive: boolean;
-  isLast: boolean;
-  isLock?: boolean;
-  onPress: () => void;
-}) => {
+  description,
+}: ChapterCardProps) => {
   const { isDarkMode } = useTheme();
   const { setChapterItem } = useCurrentChapterItem();
   const startColor = isDarkMode ? "#393939" : "#F2F2F2";
@@ -37,8 +38,7 @@ const ChapterCard = ({
       id: id,
       progress: 45,
       isLock: false,
-      description:
-        "Talk about hotel situations with this lesson! Students practise hotel-related vocabulary, watch a short video on a hotel stay and share their own experiences. They also work in pairs and role-play hotel scenarios.",
+      description: description,
     });
     onPress();
   };

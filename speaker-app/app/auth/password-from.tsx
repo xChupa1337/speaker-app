@@ -1,10 +1,8 @@
-import React from 'react';
+import React from "react";
 import PasswordFormScreen from "@/screens/password-form.screen";
 
 const PasswordFrom = () => {
-    return (
-       <PasswordFormScreen isLogin={true} />
-    );
+  return <PasswordFormScreen />;
 };
 
 export default PasswordFrom;

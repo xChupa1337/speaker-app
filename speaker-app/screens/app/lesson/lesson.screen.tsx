@@ -1,9 +1,16 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Alert, SafeAreaView, ScrollView, Text, View } from "react-native";
+import {
+  Alert,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+  ActivityIndicator,
+  Image,
+} from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import useTheme from "@/store/theme";
 import LessonHeader from "@/components/share/lessons-compnonents/lesson-header";
-import { lessonData } from "@/constans";
 import Button from "@/components/ui/button";
 import LessonVideoPlayer from "@/components/share/lessons-compnonents/lesson-video-player";
 import LessonSentence from "@/components/share/lessons-compnonents/lesson-sentence";
@@ -12,6 +19,10 @@ import BottomSheet from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import LessonBottomSheet from "@/components/share/lessons-compnonents/lesson-bottom-sheet";
 import NoLessonScreen from "@/screens/app/lesson/no-lesson-screen";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { API } from "@/services/api";
+import Loading from "@/components/share/loading";
+import Error from "@/components/share/error";
 
 export type selectedAnswer = {
   question: string;
@@ -21,26 +32,65 @@ export type selectedAnswer = {
 const LessonScreen = () => {
   const { id } = useLocalSearchParams();
   const { isDarkMode } = useTheme();
-  const [currentPage, setCurrentPage] = useState(0);
-  const lesson = lessonData.filter((lesson: any) => lesson.lessonId === id);
-  if (lesson.length === 0) return <NoLessonScreen />;
-  const selectedLesson = lesson[0];
-  const isLessonFinished = currentPage >= selectedLesson.lessonData.length;
 
+  const [lesson, setLesson] = useState<any[]>([]);
+  const [currentPage, setCurrentPage] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<
     selectedAnswer | undefined
-  >();
+  >(undefined);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
+
   const lessonBottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ["35%"], []);
 
-  const progress = (currentPage * 100) / lesson[0].lessonData.length;
+  useEffect(() => {
+    const fetchLessonData = async () => {
+      if (!id) return;
+      setIsLoading(true);
+      try {
+        const token = await AsyncStorage.getItem("token");
+        if (!token) {
+          router.replace("/auth/sign-in");
+          return;
+        }
+        const resp = await API.lesson.getLessonById(id as string, token);
+        setLesson(resp?.data || []);
+      } catch (error) {
+        console.error("Fetch lesson error:", error);
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchLessonData();
+  }, [id]);
 
   useEffect(() => {
     setSelectedAnswer(undefined);
   }, [currentPage]);
 
+  if (isLoading) {
+    return <Loading text="Fetching lesson data..." />;
+  }
+
+  if (isError) {
+    return <Error />;
+  }
+
+  if (lesson.length === 0) {
+    return <NoLessonScreen />;
+  }
+
+  const selectedLesson = lesson[0];
+  const isLessonFinished = currentPage >= selectedLesson.lessonData.length;
+  const progress = (currentPage * 100) / selectedLesson.lessonData.length;
+
   const handleOpenSheet = () => {
-    if (selectedAnswer !== undefined) lessonBottomSheetRef.current?.expand();
+    if (selectedAnswer !== undefined) {
+      lessonBottomSheetRef.current?.expand();
+    }
   };
 
   const handleUpdatePage = () => {
@@ -54,25 +104,21 @@ const LessonScreen = () => {
 
   const handlePress = () => {
     if (!isLessonFinished) {
-      const currentLesson = lesson[0].lessonData[currentPage];
-
-      if (!currentLesson.isQuestion) {
+      const current = selectedLesson.lessonData[currentPage];
+      if (!current.isQuestion) {
         setCurrentPage((prev) => prev + 1);
         return;
       }
-
-      if (currentLesson.isQuestion && selectedAnswer === undefined) {
-        Alert.alert(
-          `Please answer: ${lesson[0].lessonData[currentPage].title}`,
-        );
+      if (current.isQuestion && selectedAnswer === undefined) {
+        Alert.alert(`Please answer: ${current.title}`);
         return;
       }
-
       handleOpenSheet();
     } else {
       router.navigate("/(tabs)/book");
     }
   };
+
   return (
     <GestureHandlerRootView
       className={`flex-1 pt-16 pb-10 ${isDarkMode ? "bg-bg-dark" : "bg-bg-light"}`}
@@ -88,33 +134,32 @@ const LessonScreen = () => {
               <CompletedLessonScreen />
             ) : (
               <>
-                <Text className={`text-primary text-title-medium mb-4`}>
-                  {lesson[0].lessonData[currentPage].title}
+                <Text className="text-primary text-title-medium mb-4">
+                  {selectedLesson.lessonData[currentPage].title}
                 </Text>
-                {lesson[0].lessonData[currentPage].lessonData.map(
-                  (lesson: any, index: number) => {
-                    if (lesson.type === "video") {
+                {selectedLesson.lessonData[currentPage].lessonData.map(
+                  (step: any, idx: number) => {
+                    if (step.type === "video") {
                       return (
                         <LessonVideoPlayer
-                          videoSource={lesson.videoUri}
-                          key={index}
+                          videoSource={step.videoUri}
+                          key={idx}
                         />
                       );
-                    } else if (lesson.type === "sentence") {
+                    }
+                    if (step.type === "sentence") {
                       return (
                         <LessonSentence
-                          key={index}
-                          text={lesson.textData}
-                          questions={lesson.variants}
+                          key={idx}
+                          text={step.textData}
+                          questions={step.variants}
                           onPress={(question, correct) =>
-                            setSelectedAnswer({
-                              question,
-                              correct,
-                            })
+                            setSelectedAnswer({ question, correct })
                           }
                         />
                       );
                     }
+                    return null;
                   },
                 )}
               </>
@@ -125,20 +170,21 @@ const LessonScreen = () => {
             <Button onPress={handlePress}>
               {isLessonFinished
                 ? "Close"
-                : lesson[0].lessonData[currentPage]?.isQuestion
+                : selectedLesson.lessonData[currentPage]?.isQuestion
                   ? "Check"
                   : "Continue"}
             </Button>
           </View>
         </View>
       </SafeAreaView>
+
       {selectedAnswer !== undefined && (
         <LessonBottomSheet
           bottomSheetRef={lessonBottomSheetRef}
           description={
-            selectedAnswer?.correct
-              ? (lesson[0].lessonData[currentPage]?.correctText ?? "")
-              : (lesson[0].lessonData[currentPage]?.wrongText ?? "")
+            selectedAnswer.correct
+              ? (selectedLesson.lessonData[currentPage]?.correctText ?? "")
+              : (selectedLesson.lessonData[currentPage]?.wrongText ?? "")
           }
           updatePage={handleUpdatePage}
           selectedAnswer={selectedAnswer!}
