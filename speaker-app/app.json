@@ -37,7 +37,9 @@
       [
         "expo-font",
         {
-          "fonts": ["./assets/fonts/SF_Pro_Display_Medium.otf"]
+          "fonts": [
+            "./assets/fonts/SF_Pro_Display_Medium.otf"
+          ]
         }
       ],
       [
@@ -54,10 +56,18 @@
           "defaultChannel": "default",
           "enableBackgroundRemoteNotifications": false
         }
-      ]
+      ],
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "44538350-fa47-4dc9-b55b-e040942b0747"
+      }
+    },
+    "owner": "maki52"
   }
 }

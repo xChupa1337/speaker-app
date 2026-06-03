@@ -1,5 +1,5 @@
-import React from "react";
-import { Pressable, SafeAreaView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Pressable, Text, View } from "react-native";
 import useTheme from "@/store/theme";
 import Button from "@/components/ui/button";
 import { router } from "expo-router";

@@ -9,6 +9,13 @@ const APP_PORT = PORT || 3000;
 
 app.use(express.json());
 
+// Глобальний логер запитів
+app.use((req, res, next) => {
+  console.log(`\n📡 [${req.method}] ${req.url}`);
+  console.log(`Body:`, req.body);
+  next();
+});
+
 // Health check endpoint — використовується CI/CD pipeline і моніторингом
 app.get("/health", (_req: Request, res: Response) => {
   res.status(200).json({

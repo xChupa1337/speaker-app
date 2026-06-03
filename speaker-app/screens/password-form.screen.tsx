@@ -42,12 +42,19 @@ const PasswordFormScreen = () => {
         throw new Error();
       }
       setLoading(false);
-    } catch (e) {
-      let errorData: any;
+    } catch (e: any) {
+      let errorMessage = "Something went wrong";
       if (axios.isAxiosError(e)) {
-        errorData = e.response?.data;
+        if (e.response && e.response.data && e.response.data.error) {
+          errorMessage = e.response.data.error;
+        } else {
+          errorMessage = "Network Error: Cannot connect to server";
+        }
+      } else if (e instanceof Error) {
+        errorMessage = e.message;
       }
-      setReqError(errorData.error ? errorData.error : "Something went wrong");
+      alert("Error: " + errorMessage);
+      setReqError(errorMessage);
     } finally {
       setLoading(false);
     }

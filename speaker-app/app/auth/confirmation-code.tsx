@@ -82,6 +82,17 @@ const ConfirmationCode = () => {
       <View
         className={`flex-1 items-center py-10 justify-between ${isDarkMode ? "bg-bg-dark" : "bg-bg-light"}`}
       >
+        <View className="w-full px-5 flex-row justify-start mb-4">
+           <Text 
+             onPress={async () => {
+               await AsyncStorage.removeItem("token");
+               router.replace("/onboarding/welcome");
+             }}
+             className="text-primary text-body-medium font-semibold"
+           >
+             Cancel
+           </Text>
+        </View>
         <View className="items-center">
           <Text
             className={`text-title-small font-semibold mb-4 ${isDarkMode ? "text-bg-light" : "text-bg-dark"}`}
