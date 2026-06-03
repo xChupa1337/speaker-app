@@ -2,6 +2,7 @@ import request from "supertest";
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { app, server } from "../../app";
+import { User } from "../../models/user.model";
 
 // ── Інтеграційні тести для auth маршрутів ─────────────────────────────────
 // Використовуємо mongodb-memory-server — реальний MongoDB в пам'яті
@@ -96,9 +97,12 @@ describe("POST /api/v1/auth/sign-up", () => {
     expect(response.status).toBe(400);
   });
 
-  it("повинен повернути 400 якщо email вже існує", async () => {
+  it("повинен повернути 400 якщо email вже існує та підтверджений", async () => {
     // Реєструємо користувача перший раз
     await request(app).post("/api/v1/auth/sign-up").send(validUser);
+
+    // Робимо його підтвердженим, інакше бекенд дозволить оновити непідтвердженого
+    await User.updateOne({ email: validUser.email }, { isVerified: true });
 
     // Спроба зареєструватись з тим самим email
     const response = await request(app)
