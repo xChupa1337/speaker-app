@@ -114,11 +114,11 @@ export const signIn = async (
     }
     const user = await User.findOne({ email });
     if (!user) {
-      return next(new HttpError("Something went wrong", 400));
+      return next(new HttpError("Invalid email or password", 400));
     }
     const verifyPassword = await bcrypt.compare(password, user.password);
     if (!verifyPassword) {
-      return next(new HttpError("Something went wrong", 400));
+      return next(new HttpError("Invalid email or password", 400));
     }
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, {
       expiresIn: "7d",

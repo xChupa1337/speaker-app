@@ -125,14 +125,18 @@ const EmailAuthFormScreen = () => {
           }
         } else throw new Error();
       } catch (e) {
+        let errorMsg = "Something went wrong";
         if (axios.isAxiosError(e)) {
-          const errorData = e.response?.data;
-          setIsError({
-            emailError,
-            passwordError,
-            reqError: errorData?.error || "Something went wrong",
-          });
+          errorMsg = e.response?.data?.error || e.message || "Network error";
+        } else if (e instanceof Error) {
+          errorMsg = e.message;
         }
+
+        setIsError({
+          emailError,
+          passwordError,
+          reqError: errorMsg,
+        });
       } finally {
         setReqIsLoading(false);
       }
