@@ -16,7 +16,7 @@ const ProfileScreen = () => {
     >
       <Animated.ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingTop: 100 }}
+        contentContainerStyle={{ paddingTop: 150 }}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scrollY } } }],
           { useNativeDriver: true },

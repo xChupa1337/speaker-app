@@ -25,7 +25,10 @@ export interface GetChaptersResponse {
   };
 }
 
+import useUserStore from "@/store/user";
+
 const BookScreen = () => {
+  const { user } = useUserStore();
   const { isDarkMode } = useTheme();
   const bottomSheetRef = useRef<BottomSheet>(null);
   const aiBottomSheetRef = useRef<BottomSheet>(null);
@@ -61,8 +64,14 @@ const BookScreen = () => {
           <View className="mt-8 gap-3">
             <ShimmerButton
               isDarkTheme={isDarkMode}
-              title="Learn English with AI"
-              onPress={handleOpenAISheet}
+              title="Learn with AI"
+              onPress={() => {
+                if (user?.subscription !== "premium") {
+                  alert("You need a premium subscription to use AI features.");
+                  return;
+                }
+                handleOpenAISheet();
+              }}
             />
           </View>
           <ChaptersList handleOpenSheet={handleOpenSheet} />

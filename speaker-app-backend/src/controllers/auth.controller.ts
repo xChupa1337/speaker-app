@@ -6,6 +6,8 @@ import { User } from "../models/user.model";
 import { JWT_SECRET } from "../config/env";
 import { sendEmail } from "../utils/send-email";
 
+import { PremiumEmail } from "../models/premium-email.model";
+
 export const checkEmail: RequestHandler = async (req, res, next) => {
   try {
     const { email } = req.body || {};
@@ -54,10 +56,15 @@ export const signUp = async (
     const hashPassword = await bcrypt.hash(password, 8);
     const userCode = Math.floor(1000 + Math.random() * 9000);
     
+    // Check if user pre-paid
+    const isPremium = await PremiumEmail.findOne({ email });
+    const subscription = isPremium ? "premium" : "standard";
+
     if (user) {
       user.password = hashPassword;
       user.name = name;
       user.code = userCode;
+      user.subscription = subscription;
       await user.save();
     } else {
       user = await User.create({
@@ -65,6 +72,7 @@ export const signUp = async (
         email,
         password: hashPassword,
         code: userCode,
+        subscription,
       });
     }
     
@@ -115,6 +123,7 @@ export const signIn = async (
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, {
       expiresIn: "7d",
     });
+    console.log(`User ${user.email} logged in with subscription: ${user.subscription}`);
     res.status(200).json({ success: true, data: { token, user } });
   } catch (e) {
     next(e);

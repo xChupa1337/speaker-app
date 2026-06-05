@@ -29,6 +29,11 @@ const userSchema = new mongoose.Schema(
     code: Number,
     name: { type: String },
     isVerified: { type: Boolean, default: false },
+    subscription: {
+      type: String,
+      enum: ["standard", "premium"],
+      default: "standard",
+    },
     settings: settingsSchema,
     progress: [progressSchema],
   },

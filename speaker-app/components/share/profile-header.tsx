@@ -4,6 +4,8 @@ import OnBoardingTitle from "@/components/share/on-boarding-title";
 import { AddFriendIcon, SettingsIcon } from "@/assets/icons/icons";
 import { router } from "expo-router";
 
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 const THRESHOLD = 200;
 
 const ProfileHeader = ({
@@ -13,6 +15,7 @@ const ProfileHeader = ({
   scrollY: any;
   isDarkMode: boolean;
 }) => {
+  const insets = useSafeAreaInsets();
   const iconsOpacity = scrollY.interpolate({
     inputRange: [0, THRESHOLD],
     outputRange: [1, 0],
@@ -32,7 +35,8 @@ const ProfileHeader = ({
 
   return (
     <View
-      className={`absolute top-5 left-0 right-0 h-[120px] px-[24px] pt-4 items-center justify-center ${isDarkMode ? "bg-bg-dark" : "bg-bg-light"}`}
+      style={{ paddingTop: insets.top }}
+      className={`absolute top-0 left-0 right-0 h-[100px] px-[24px] items-center justify-center ${isDarkMode ? "bg-bg-dark" : "bg-bg-light"}`}
     >
       <Animated.View
         style={{

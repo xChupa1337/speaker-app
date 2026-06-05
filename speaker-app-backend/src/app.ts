@@ -6,9 +6,18 @@ import UserRouter from "./routes/user.routers";
 import ChapterRouter from "./routes/chapter.routers";
 import LessonRouter from "./routes/lesson.routers";
 import errorHandlerMiddleware from "./middlewares/error-handler.middleware";
+import PaymentRouter from "./routes/payment.routers";
+import { handleWebhook } from "./controllers/payment.controller";
+import cors from "cors";
 
 const app = express();
 const APP_PORT = PORT || 3000;
+
+// Enable CORS
+app.use(cors());
+
+// Webhook needs raw body
+app.post(`${BASE_URL}/payment/webhook`, express.raw({ type: 'application/json' }), handleWebhook);
 
 app.use(express.json());
 
@@ -33,6 +42,7 @@ app.use(`${BASE_URL}/auth`, AuthRouter);
 app.use(`${BASE_URL}/user`, UserRouter);
 app.use(`${BASE_URL}/chapter`, ChapterRouter);
 app.use(`${BASE_URL}/lesson`, LessonRouter);
+app.use(`${BASE_URL}/payment`, PaymentRouter);
 
 app.use(errorHandlerMiddleware);
 

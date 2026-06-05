@@ -9,4 +9,5 @@ export interface User {
     avatarUri?: string;
     country?: string;
     level?: string;
+    subscription?: "standard" | "premium";
 }

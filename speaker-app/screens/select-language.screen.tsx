@@ -7,9 +7,12 @@ import LanguageCard from "@/components/share/language-card";
 import OnBoardingTitle from "@/components/share/on-boarding-title";
 import { router } from "expo-router";
 
+import useUserStore from "@/store/user";
+
 const SelectLanguageScreen = () => {
   const { isDarkMode } = useTheme();
   const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
+  const { user } = useUserStore();
 
   useEffect(() => {
     const onBackPress = () => true;
@@ -29,12 +32,12 @@ const SelectLanguageScreen = () => {
   };
 
   const handleConfirmPress = () => {
-    if (selectedLanguage === "English") {
+    if (isAvailable) {
       router.navigate("/auth/language-level");
     }
   };
 
-  const isAvailable = selectedLanguage === "English";
+  const isAvailable = user?.subscription === "premium" || selectedLanguage === "English";
 
   return (
     <View

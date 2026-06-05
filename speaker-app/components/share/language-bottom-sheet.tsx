@@ -4,6 +4,8 @@ import BottomSheet, { BottomSheetBackdrop, BottomSheetScrollView } from "@gorhom
 import { UKFlagRounded } from "@/assets/images/images";
 import useLearningLanguageStore, { SUPPORTED_LANGUAGES, Language } from "@/store/learning-language";
 
+import useUserStore from "@/store/user";
+
 interface LanguageSelectorBottomSheetProps {
   isDarkMode: boolean;
 }
@@ -11,6 +13,7 @@ interface LanguageSelectorBottomSheetProps {
 const LanguageSelectorBottomSheet = forwardRef<BottomSheet, LanguageSelectorBottomSheetProps>(
   ({ isDarkMode }, ref) => {
     const { currentLanguage, setLanguage } = useLearningLanguageStore();
+    const { user } = useUserStore();
 
     const renderBackdrop = useCallback(
       (props: any) => (
@@ -56,10 +59,16 @@ const LanguageSelectorBottomSheet = forwardRef<BottomSheet, LanguageSelectorBott
               return (
                 <Pressable
                   key={lang.id}
-                  onPress={() => handleSelect(lang)}
+                  onPress={() => {
+                    if (lang.name !== "English" && user?.subscription !== "premium") {
+                      alert("You need a premium subscription to access this language.");
+                      return;
+                    }
+                    handleSelect(lang);
+                  }}
                   className={`flex-row items-center p-4 rounded-xl border-2 ${
                     isSelected ? "border-primary bg-primary/10" : isDarkMode ? "border-surfaces-dark-1" : "border-surfaces-light-1"
-                  }`}
+                  } ${lang.name !== "English" && user?.subscription !== "premium" ? "opacity-50" : ""}`}
                 >
                   <View className="w-10 h-10 rounded-full overflow-hidden mr-4 bg-surfaces-light-2 items-center justify-center">
                     {lang.flagUri ? (

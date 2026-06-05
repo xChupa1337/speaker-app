@@ -61,18 +61,10 @@ const EmailAuthFormScreen = () => {
     androidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID || "dummy-android-client",
   });
 
-  // Debug: show redirect URI on first render
-  React.useEffect(() => {
-    if (request?.redirectUri) {
-      console.log("🔗 Google OAuth redirectUri:", request.redirectUri);
-      alert("Redirect URI: " + request.redirectUri);
-    }
-  }, [request]);
-
   React.useEffect(() => {
     if (response?.type === "success") {
       const { authentication } = response;
-      alert("Google Login Success! Token: " + authentication?.accessToken?.substring(0, 10) + "...");
+      // Handle login success
     }
   }, [response]);
 

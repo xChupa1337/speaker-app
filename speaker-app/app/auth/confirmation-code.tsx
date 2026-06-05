@@ -12,7 +12,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { API } from "@/services/api";
 import axios from "axios";
-
+import useUserStore from "@/store/user";
 const CELL_COUNT = 4;
 
 const ConfirmationCode = () => {
@@ -61,7 +61,10 @@ const ConfirmationCode = () => {
         return;
       }
       const resp = await API.auth.verifyEmail(code, token!);
-      if (resp.success) router.replace("/auth/select-language");
+      if (resp.success) {
+        useUserStore.getState().setUser(resp.data.user);
+        router.replace("/auth/select-language");
+      }
       else throw new Error();
       setIsLoading(false);
     } catch (e) {

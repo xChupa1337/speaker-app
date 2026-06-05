@@ -8,12 +8,42 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
+import { useState, useEffect } from "react";
+
 export default function Home() {
+  const [loadingPremium, setLoadingPremium] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get("payment") === "success") {
+        alert("Payment successful! Please use the email you entered during checkout to register in the app. Your premium features will be unlocked automatically.");
+      } else if (urlParams.get("payment") === "cancel") {
+        alert("Payment was canceled. You can try again later.");
+      }
+    }
+  }, []);
+
+  const handlePremiumCheckout = async () => {
+    setLoadingPremium(true);
+    try {
+       const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/payment/create-checkout-session` : "http://localhost:5555/api/v1/payment/create-checkout-session", { method: "POST" });
+       const data = await res.json();
+       if (data.url) {
+         window.location.href = data.url;
+       }
+    } catch (e) {
+       console.error(e);
+    } finally {
+       setLoadingPremium(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-transparent text-slate-900 overflow-hidden font-sans">
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-32 px-6 overflow-hidden">
+      <section id="download" className="relative pt-32 pb-20 lg:pt-40 lg:pb-32 px-6 overflow-hidden">
         {/* Colorful Background Elements */}
         <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-primary/10 rounded-full blur-[100px] -z-10" />
         <div className="absolute bottom-[-10%] left-[-5%] w-[600px] h-[600px] bg-green-400/10 rounded-full blur-[100px] -z-10" />
@@ -77,22 +107,47 @@ export default function Home() {
           className="max-w-4xl mx-auto mt-24 relative flex justify-center items-center"
         >
           {/* Floating Faces */}
-          <motion.div animate={{ y: [0, -15, 0] }} transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }} className="absolute -left-12 top-10 md:-left-24 md:top-20 z-20">
+          <motion.div animate={{ y: [0, -15, 0] }} transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }} className="absolute -left-4 top-10 md:-left-12 md:top-20 z-30">
             <Image src="/face1.jpg" alt="User" width={80} height={80} className="rounded-full border-4 border-white shadow-2xl object-cover" />
           </motion.div>
-          <motion.div animate={{ y: [0, 15, 0] }} transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }} className="absolute -right-8 top-32 md:-right-16 md:top-40 z-20">
+          <motion.div animate={{ y: [0, 15, 0] }} transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }} className="absolute -right-4 top-32 md:-right-12 md:top-40 z-30">
             <Image src="/face2.jpg" alt="User" width={96} height={96} className="rounded-full border-4 border-white shadow-2xl object-cover" />
           </motion.div>
-          <motion.div animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 3.5, ease: "easeInOut", delay: 2 }} className="absolute left-10 bottom-10 md:left-20 md:bottom-20 z-20">
+          <motion.div animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 3.5, ease: "easeInOut", delay: 2 }} className="absolute left-10 bottom-10 md:left-20 md:bottom-20 z-30">
             <Image src="/face3.jpg" alt="User" width={72} height={72} className="rounded-full border-4 border-white shadow-2xl object-cover" />
           </motion.div>
-          <motion.div animate={{ y: [0, 20, 0] }} transition={{ repeat: Infinity, duration: 6, ease: "easeInOut", delay: 0.5 }} className="absolute right-12 bottom-0 md:right-24 md:-bottom-10 z-20">
+          <motion.div animate={{ y: [0, 20, 0] }} transition={{ repeat: Infinity, duration: 6, ease: "easeInOut", delay: 0.5 }} className="absolute right-12 bottom-0 md:right-24 md:-bottom-10 z-30">
             <Image src="/face4.jpg" alt="User" width={110} height={110} className="rounded-full border-4 border-white shadow-2xl object-cover" />
           </motion.div>
 
-          {/* Main Mockup */}
-          <div className="relative w-[320px] h-[640px] rounded-[3.5rem] border-[14px] border-white bg-slate-100 shadow-[0_40px_80px_-20px_rgba(0,122,255,0.4)] z-10 overflow-hidden transform hover:-translate-y-4 transition-transform duration-700">
-            <Image src="/screenshot-lessons.png" alt="App Onboarding" fill className="object-cover" />
+          {/* 3-Phone Premium Layout */}
+          <div className="relative flex justify-center items-center w-full h-[640px] max-w-4xl">
+             {/* Left Phone - Vocabulary */}
+             <motion.div 
+                initial={{ opacity: 0, x: 100, rotate: 0 }}
+                animate={{ opacity: 1, x: -140, rotate: -6 }}
+                transition={{ duration: 1, delay: 0.6 }}
+                className="absolute w-[260px] h-[540px] rounded-[3rem] border-[10px] border-white bg-slate-100 shadow-2xl z-0 overflow-hidden hidden md:block"
+             >
+                <Image src="/scr3.png" alt="Vocabulary" fill className="object-cover" />
+                <div className="absolute inset-0 bg-white/10 backdrop-blur-[1px]"></div>
+             </motion.div>
+
+             {/* Right Phone - Question/Stats */}
+             <motion.div 
+                initial={{ opacity: 0, x: -100, rotate: 0 }}
+                animate={{ opacity: 1, x: 140, rotate: 6 }}
+                transition={{ duration: 1, delay: 0.8 }}
+                className="absolute w-[260px] h-[540px] rounded-[3rem] border-[10px] border-white bg-slate-100 shadow-2xl z-0 overflow-hidden hidden md:block"
+             >
+                <Image src="/scr2.png" alt="Question" fill className="object-cover" />
+                <div className="absolute inset-0 bg-white/10 backdrop-blur-[1px]"></div>
+             </motion.div>
+
+             {/* Center Main Phone - Lessons */}
+             <div className="relative w-[320px] h-[640px] rounded-[3.5rem] border-[14px] border-white bg-slate-100 shadow-[0_40px_80px_-20px_rgba(0,122,255,0.4)] z-10 overflow-hidden transform hover:-translate-y-4 transition-transform duration-700">
+               <Image src="/scr1.png" alt="App Onboarding" fill className="object-cover" />
+             </div>
           </div>
         </motion.div>
       </section>
@@ -279,6 +334,48 @@ export default function Home() {
                   <p className="text-sm text-slate-500">Learning English</p>
                 </div>
               </div>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section id="pricing" className="py-32 px-6 bg-white border-y border-slate-100">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-20 space-y-4">
+            <h2 className="text-4xl md:text-5xl font-black tracking-tight text-slate-900">Simple Pricing</h2>
+            <p className="text-xl text-slate-500 max-w-2xl mx-auto font-medium">Choose the plan that works best for you.</p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {/* Standard */}
+            <Card className="border-2 border-slate-100 shadow-xl shadow-slate-200/50 rounded-[2rem] p-8 bg-white relative">
+              <h3 className="text-3xl font-bold mb-2">Standard</h3>
+              <p className="text-slate-500 mb-6">Learn English effectively.</p>
+              <div className="text-5xl font-black mb-8">Free</div>
+              <ul className="space-y-4 mb-8">
+                <li className="flex items-center gap-3 font-medium text-slate-700"><CheckCircle2 className="text-green-500" /> English Language</li>
+                <li className="flex items-center gap-3 font-medium text-slate-700"><CheckCircle2 className="text-green-500" /> Interactive Lessons</li>
+                <li className="flex items-center gap-3 font-medium text-slate-300"><CheckCircle2 className="text-slate-300" /> AI Practice</li>
+                <li className="flex items-center gap-3 font-medium text-slate-300"><CheckCircle2 className="text-slate-300" /> All Languages</li>
+              </ul>
+              <Button onClick={() => window.location.href = "#download"} variant="outline" className="w-full h-14 rounded-full text-lg font-bold border-2">Download APK</Button>
+            </Card>
+
+            {/* Premium */}
+            <Card className="border-2 border-primary shadow-2xl shadow-primary/20 rounded-[2rem] p-8 bg-white relative transform md:-translate-y-4">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-white px-4 py-1 rounded-full font-bold text-sm tracking-wide">MOST POPULAR</div>
+              <h3 className="text-3xl font-bold mb-2">Premium</h3>
+              <p className="text-slate-500 mb-6">Unlock all languages & AI features.</p>
+              <div className="text-5xl font-black mb-8">20 ₴<span className="text-lg text-slate-500 font-medium">/lifetime</span></div>
+              <ul className="space-y-4 mb-8">
+                <li className="flex items-center gap-3 font-medium text-slate-700"><CheckCircle2 className="text-primary" /> English Language</li>
+                <li className="flex items-center gap-3 font-medium text-slate-700"><CheckCircle2 className="text-primary" /> Interactive Lessons</li>
+                <li className="flex items-center gap-3 font-medium text-slate-700"><CheckCircle2 className="text-primary" /> AI Speaking Practice</li>
+                <li className="flex items-center gap-3 font-medium text-slate-700"><CheckCircle2 className="text-primary" /> All 6+ Languages</li>
+              </ul>
+              <Button onClick={handlePremiumCheckout} disabled={loadingPremium} className="w-full h-14 rounded-full text-lg font-bold">
+                {loadingPremium ? "Redirecting..." : "Get Premium"}
+              </Button>
             </Card>
           </div>
         </div>

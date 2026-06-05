@@ -21,7 +21,8 @@ export function Navbar() {
         <div className="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
           <Link href="/features" className={`hover:text-primary transition-colors ${pathname === '/features' ? 'text-primary' : ''}`}>Features</Link>
           <Link href="/methodology" className={`hover:text-primary transition-colors ${pathname === '/methodology' ? 'text-primary' : ''}`}>Methodology</Link>
-          <Link href="/pricing" className={`hover:text-primary transition-colors ${pathname === '/pricing' ? 'text-primary' : ''}`}>Pricing</Link>
+          <Link href="/#pricing" className="hover:text-primary transition-colors">Pricing</Link>
+          <Link href="/faq" className={`hover:text-primary transition-colors ${pathname === '/faq' ? 'text-primary' : ''}`}>FAQ</Link>
         </div>
 
         <div className="flex items-center gap-4">
@@ -30,7 +31,7 @@ export function Navbar() {
               Admin Panel
             </Button>
           </Link>
-          <Button className="font-bold rounded-full px-6 shadow-xl shadow-primary/30 hover:-translate-y-0.5 transition-transform">
+          <Button onClick={() => { if(pathname === '/') window.location.href = '#download'; else window.location.href = '/#download'; }} className="font-bold rounded-full px-6 shadow-xl shadow-primary/30 hover:-translate-y-0.5 transition-transform">
             Get the App
           </Button>
         </div>

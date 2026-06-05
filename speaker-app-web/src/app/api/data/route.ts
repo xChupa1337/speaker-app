@@ -41,7 +41,7 @@ export async function GET() {
     }));
 
     // Read vocab.ts
-    let vocabTopics = [];
+    let vocabTopics: any[] = [];
     try {
        const vocabPath = path.resolve(process.cwd(), '../speaker-app/constants/vocab.ts');
        if (fs.existsSync(vocabPath)) {
@@ -49,7 +49,7 @@ export async function GET() {
           
           // Get all supported languages from the vocab file
           const langsMatch = content.match(/if \(lang === "(.*?)"\)/g);
-          const langs = langsMatch ? langsMatch.map(l => l.match(/"(.*?)"/)[1]).filter(l => l !== 'uk') : ['en'];
+          const langs = langsMatch ? langsMatch.map(l => l.match(/"(.*?)"/)?.[1]).filter(Boolean).filter(l => l !== 'uk') : ['en'];
           
           // Execute the string to get the vocabulary function
           const dataStr = content
@@ -59,9 +59,9 @@ export async function GET() {
           const fn = getFn();
           
           // Combine vocab from all languages into one list for the admin
-          langs.forEach(lang => {
+          langs.forEach((lang: any) => {
             const langVocab = fn(lang) || [];
-            langVocab.forEach(v => {
+            langVocab.forEach((v: any) => {
                vocabTopics.push({
                  ...v,
                  language: lang,
@@ -76,7 +76,7 @@ export async function GET() {
 
     return NextResponse.json({ lessons, vocabTopics, users });
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as any).message }, { status: 500 });
   }
 }
 
@@ -112,7 +112,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ error: 'Unknown type' }, { status: 400 });
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as any).message }, { status: 500 });
   }
 }
 
@@ -134,6 +134,6 @@ export async function DELETE(req: Request) {
     
     return NextResponse.json({ success: true });
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as any).message }, { status: 500 });
   }
 }
