@@ -6,5 +6,7 @@ export interface User {
     isVerified: boolean;
     name: string;
     progress: any[];
-
+    avatarUri?: string;
+    country?: string;
+    level?: string;
 }
