@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-native-confetti-cannon/src/index.js b/node_modules/react-native-confetti-cannon/src/index.js
+index 7092e70..a4e6ed6 100644
+--- a/node_modules/react-native-confetti-cannon/src/index.js
++++ b/node_modules/react-native-confetti-cannon/src/index.js
+@@ -5,7 +5,7 @@ import { Animated, Dimensions, Easing, Platform } from 'react-native';
+ import type { CompositeAnimation } from 'react-native/Libraries/Animated/src/AnimatedImplementation';
+ import type { EndResult } from 'react-native/Libraries/Animated/src/animations/Animation';
+ 
+-import Confetti from './components/confetti';
++import Confetti from './components/Confetti';
+ import { randomValue, randomColor } from './utils';
+ 
+ type Props = {|

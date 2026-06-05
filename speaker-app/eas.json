@@ -1,0 +1,27 @@
+{
+  "cli": {
+    "version": ">= 20.0.0"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "ios": {
+        "simulator": true
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_BACKEND_URL": "https://fair-mammals-shake.loca.lt/api/v1",
+        "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "243423401077-ctkf7jm87iokebgp0f3gsblkbj2l73kn.apps.googleusercontent.com",
+        "EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID": "243423401077-n3jmjgnaiu6hpmbng0o5l0j7s987u263.apps.googleusercontent.com",
+        "EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID": "243423401077-3rtbj1iuve6rd5qlfau8at0hklru9bon.apps.googleusercontent.com"
+      }
+    },
+    "production": {}
+  },
+  "submit": {
+    "production": {}
+  }
+}

@@ -10,13 +10,18 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "icon": "./assets/images/logo/app-logo.png"
+      "icon": "./assets/images/logo/app-logo.png",
+      "bundleIdentifier": "com.maki52.speakerapp",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/logo/app-logo.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.maki52.speakerapp"
     },
     "web": {
       "bundler": "metro",
@@ -57,7 +62,15 @@
           "enableBackgroundRemoteNotifications": false
         }
       ],
-      "expo-web-browser"
+      "expo-web-browser",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
