@@ -38,19 +38,19 @@ const Chapter = ({
         >
           Lessons completed
         </Text>
-        <Text className="text-primary text-body-medium">0/5</Text>
+        <Text className="text-primary text-body-medium">{topics?.filter((t: any) => t.isCompleted).length || 0}/{topics?.length || 0}</Text>
       </View>
 
-      {topics.map((topic, index) => (
+      {topics?.map((topic, index) => (
         <ChapterCard
           key={index + chapterTitle}
           title={topic.title}
           imgUri={topic.imgUri}
           isLock={isLock}
-          id={topic._id}
+          _id={topic._id}
           description={topic.description}
-          isActive={isLock ? index === 0 : index === 1}
-          isLast={index === topics.length - 1}
+          isActive={(topic as any).isCompleted}
+          isLast={index === (topics?.length || 0) - 1}
           onPress={onCardPress}
         />
       ))}
@@ -58,6 +58,7 @@ const Chapter = ({
         title="Test work"
         description="Test your skills to unlock the next chapter"
         isLock={isLock}
+        onPress={onCardPress}
       />
     </View>
   );

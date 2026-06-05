@@ -1,22 +1,27 @@
 import React from "react";
 import { View, Text, Image, Pressable } from "react-native";
 import useTheme from "@/store/theme";
-import { LockIcon, MarkIcon } from "@/assets/icons/icons";
+import { LockIcon, StarIcon } from "@/assets/icons/icons";
 import { LinearGradient } from "expo-linear-gradient";
 import useCurrentChapterItem from "@/store/selected-chapter";
 import { Topic } from "@/types/topic.types";
+import useStarredChaptersStore from "@/store/starred-chapters";
 
-interface ChapterCardProps extends Topic {
+interface ChapterCardProps {
+  title: string;
+  imgUri: string;
+  _id: string;
   isActive: boolean;
   isLast: boolean;
   isLock?: boolean;
   onPress: () => void;
+  description?: string;
 }
 
 const ChapterCard = ({
   title,
   imgUri,
-  id,
+  _id,
   isActive,
   isLast,
   isLock,
@@ -25,17 +30,20 @@ const ChapterCard = ({
 }: ChapterCardProps) => {
   const { isDarkMode } = useTheme();
   const { setChapterItem } = useCurrentChapterItem();
+  const { isStarred, toggleStar } = useStarredChaptersStore();
   const startColor = isDarkMode ? "#393939" : "#F2F2F2";
   const endColor = "#007AFF";
-  const addToFavorite = () => {
-    console.log("favourite!");
+  const starred = isStarred(_id || title);
+
+  const addToFavorite = (e: any) => {
+    e.stopPropagation();
+    toggleStar(_id || title);
   };
   const handlePress = () => {
-    console.log("PRESS!!!");
     setChapterItem({
       title: title,
       imgUri: imgUri,
-      id: id,
+      id: _id,
       progress: 45,
       isLock: false,
       description: description,
@@ -56,7 +64,7 @@ const ChapterCard = ({
             </View>
           )}
           <Image
-            source={{ uri: imgUri }}
+            source={{ uri: imgUri || "https://media.istockphoto.com/id/939566616/photo/wooden-table-with-empty-paper-top-view.jpg?s=612x612&w=0&k=20&c=9fcXhqijV2bzhcA1q9FprWU0s88qLOSeMx_c2OmfE-Q=" }}
             className={`w-16 h-16 rounded-full ${isLock ? "opacity-35" : ""}`}
           />
           {isLock && isActive && (
@@ -74,9 +82,9 @@ const ChapterCard = ({
 
       <Pressable
         onPress={addToFavorite}
-        className={`mr-2 w-12 h-12 ${isActive ? "border-2 border-primary" : `${isDarkMode ? "bg-surfaces-dark-1" : "bg-surfaces-light-1"}`}  rounded-[12px] items-center justify-center`}
+        className={`mr-2 w-12 h-12 ${isActive ? "border-2 border-primary" : `${isDarkMode ? "bg-surfaces-dark-1" : "bg-surfaces-light-1"}`} ${starred ? 'bg-primary/20' : ''} rounded-[12px] items-center justify-center`}
       >
-        <MarkIcon isDark={isDarkMode} />
+        <StarIcon isDark={!starred ? isDarkMode : true} />
       </Pressable>
 
       {isLast ? (

@@ -9,6 +9,9 @@ import {
 import InfoCard from "@/components/share/info-card";
 import { UserProgressType } from "../../constants";
 
+import useLearningLanguageStore from "@/store/learning-language";
+import { Image } from "react-native";
+
 interface UserProgressCircleProps extends UserProgressType {
   isDarkMode: boolean;
 }
@@ -20,17 +23,23 @@ const UserProgressCircle = ({
   secondBlock,
   fistBlock,
 }: UserProgressCircleProps) => {
+  const { currentLanguage } = useLearningLanguageStore();
+  
   return (
     <>
       <View className="px-6 flex-row justify-between items-center">
         <View className="flex-row gap-3 items-center">
-          <View className="h-[35px] w-[27px] rounded-full overflow-hidden pr-3">
-            <UKFlag width={35} height={35} />
+          <View className="h-[35px] w-[35px] rounded-full overflow-hidden items-center justify-center bg-surfaces-light-2">
+            {currentLanguage?.flagUri ? (
+              <Image source={{ uri: currentLanguage.flagUri }} className="w-full h-full" resizeMode="cover" />
+            ) : (
+              <Text className="font-bold">{currentLanguage?.code || "EN"}</Text>
+            )}
           </View>
           <Text
             className={`text-title-small ${isDarkMode ? "text-body-primary-dark" : "text-body-primary-light"}`}
           >
-            English
+            {currentLanguage?.name || "English"}
           </Text>
         </View>
         <View
@@ -39,7 +48,7 @@ const UserProgressCircle = ({
         <Text
           className={`text-title-small ${isDarkMode ? "text-body-primary-dark" : "text-body-primary-light"}`}
         >
-          British
+          {currentLanguage?.code || "EN"}
         </Text>
       </View>
       <View className="flex-1 justify-center items-center">

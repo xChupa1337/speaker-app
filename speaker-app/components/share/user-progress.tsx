@@ -1,10 +1,15 @@
 import React from "react";
 import { Text, View } from "react-native";
 import useTheme from "@/store/theme";
+import useUserStore from "@/store/user";
 
 const UserProgress = () => {
   const { isDarkMode } = useTheme();
-  const progress = 11;
+  const { user } = useUserStore();
+  
+  const completedCount = user?.progress?.length || 0;
+  // Let's assume each completed item adds 5% for now until real total is available
+  const progress = Math.min(completedCount * 5, 100);
 
   return (
     <View className="relative w-full h-4">
@@ -13,12 +18,12 @@ const UserProgress = () => {
       />
 
       <View
-        style={{ width: `${progress + 5 - 8}%` }}
+        style={{ width: `${progress}%` }}
         className="absolute bg-primary h-4 rounded-[12px]"
       />
 
       <View
-        style={{ left: `${progress - 8}%`, top: "-25%" }}
+        style={{ left: `${Math.max(progress - 8, 0)}%`, top: "-25%" }}
         className="bg-primary absolute h-6 w-auto px-2 rounded-[12px] justify-center items-center"
       >
         <Text className="text-bg-light">{progress}%</Text>

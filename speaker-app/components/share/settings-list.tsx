@@ -23,9 +23,8 @@ const SettingsList = ({items, title}: settingListProps) => {
             </View>
             <View className='gap-2 pr-1'>
                 {items.map((item, index) => (
-                    <>
-                        <View key={index + item.name}
-                              className='flex-row justify-between items-center'>
+                    <React.Fragment key={index + item.name}>
+                        <View className='flex-row justify-between items-center'>
                             <Text
                                 className={`${isDarkMode ? 'text-bg-light' : 'text-bg-dark'} text-title-small`}>{item.name}</Text>
 
@@ -40,7 +39,7 @@ const SettingsList = ({items, title}: settingListProps) => {
                         <View
                             className={`w-full h-[2px] my-3 ${isDarkMode ? 'bg-surfaces-dark-1' : 'bg-surfaces-light-1'}`}/>
 
-                    </>
+                    </React.Fragment>
                 ))}
             </View>
         </View>

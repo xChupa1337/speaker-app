@@ -54,12 +54,7 @@ const ChapterCardBottomSheet = ({
           >
             {title}
           </Text>
-          <View className="flex-row justify-between items-center mb-4 ">
-            <Text
-              className={`${isDarkMode ? "text-bg-light/60" : "text-bg-dark/60"} text-title-small`}
-            >
-              - Chapter 1:Travelling
-            </Text>
+          <View className="flex-row justify-end items-center mb-4 ">
             <Pressable
               className={`mr-2 w-12 h-12 ${isActive ? "border-2 border-primary" : `${isDarkMode ? "bg-surfaces-dark-1" : "bg-surfaces-light-1"}`}  rounded-[12px] items-center justify-center`}
             >
@@ -67,7 +62,7 @@ const ChapterCardBottomSheet = ({
             </Pressable>
           </View>
           <Image
-            source={{ uri: imgUri }}
+            source={{ uri: imgUri || "https://media.istockphoto.com/id/939566616/photo/wooden-table-with-empty-paper-top-view.jpg?s=612x612&w=0&k=20&c=9fcXhqijV2bzhcA1q9FprWU0s88qLOSeMx_c2OmfE-Q=" }}
             style={{ width: "100%", height: 200, borderRadius: 12 }}
           />
           <View className="my-4">
@@ -78,11 +73,7 @@ const ChapterCardBottomSheet = ({
             </Text>
             <UserProgress />
           </View>
-          <Text
-            className={`${isDarkMode ? "text-bg-light/60" : "text-bg-dark/60"} mb-3 text-title-small`}
-          >
-            🈯 Level: Intermediate - B1
-          </Text>
+          {/* Empty gap removed */}
           <Text
             className={`${isDarkMode ? "text-bg-light/60" : "text-bg-dark/60"} mb-3 text-title-small`}
           >

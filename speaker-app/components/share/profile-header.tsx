@@ -66,7 +66,9 @@ const ProfileHeader = ({
         }}
       >
         <View className="gap-7 flex-row">
-          <AddFriendIcon isDark={isDarkMode} />
+          <Pressable onPress={() => router.push("/(tabs)/chat")}>
+            <AddFriendIcon isDark={isDarkMode} />
+          </Pressable>
           <Pressable onPress={handleSettingsPress}>
             <SettingsIcon isDark={isDarkMode} />
           </Pressable>

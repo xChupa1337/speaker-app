@@ -3,6 +3,7 @@ import BottomSheet, {BottomSheetView} from "@gorhom/bottom-sheet";
 import {ScrollView, Text, View} from "react-native";
 import {AIRobot} from "@/assets/images/onboarding/hello_img";
 import ShimmerButton from "@/components/share/shimmer-button";
+import { useRouter } from "expo-router";
 
 
 const AiMessageBottomSheet = ({bottomSheetRef, isDarkMode, snapPoints}: {
@@ -10,6 +11,7 @@ const AiMessageBottomSheet = ({bottomSheetRef, isDarkMode, snapPoints}: {
     snapPoints: (string | number)[];
     isDarkMode: boolean;
 }) => {
+    const router = useRouter();
     return (
         <BottomSheet
             ref={bottomSheetRef}
@@ -45,7 +47,11 @@ const AiMessageBottomSheet = ({bottomSheetRef, isDarkMode, snapPoints}: {
                 </ScrollView>
                 <View className='py-2 gap-2'>
                     <ShimmerButton title={'Start the lesson 🚀'}
-                                   isDarkTheme={isDarkMode}/>
+                                   isDarkTheme={isDarkMode}
+                                   onPress={() => {
+                                       bottomSheetRef.current?.close();
+                                       router.push('/ai-lesson');
+                                   }}/>
                     <Text style={{color: '#BDBDBD'}}
                           className={`text-center justify-center text-neutral text-title-xs font-extralight`}>
                         Test data will not be saved if you exit early.
