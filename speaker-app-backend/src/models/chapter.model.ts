@@ -5,6 +5,7 @@ const chapterSchema = new mongoose.Schema(
     title: { type: String, required: [true, "Title is required"] },
     order: { type: Number, required: [true, "Order is required"] },
     iconUrl: { type: String, required: [true, "Icon is required"] },
+    languageId: { type: String, default: "en" },
   },
   { timestamps: true },
 );

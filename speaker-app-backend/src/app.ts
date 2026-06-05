@@ -2,6 +2,9 @@ import express, { Request, Response } from "express";
 import connectToDataBase from "./database/mongodb";
 import { PORT, BASE_URL } from "./config/env";
 import AuthRouter from "./routes/auth.routers";
+import UserRouter from "./routes/user.routers";
+import ChapterRouter from "./routes/chapter.routers";
+import LessonRouter from "./routes/lesson.routers";
 import errorHandlerMiddleware from "./middlewares/error-handler.middleware";
 
 const app = express();
@@ -27,6 +30,9 @@ app.get("/health", (_req: Request, res: Response) => {
 });
 
 app.use(`${BASE_URL}/auth`, AuthRouter);
+app.use(`${BASE_URL}/user`, UserRouter);
+app.use(`${BASE_URL}/chapter`, ChapterRouter);
+app.use(`${BASE_URL}/lesson`, LessonRouter);
 
 app.use(errorHandlerMiddleware);
 

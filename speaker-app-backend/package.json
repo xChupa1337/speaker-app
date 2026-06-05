@@ -4,11 +4,13 @@
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
-    "start": "ts-node src/app.ts",
+    "start": "node dist/app.js",
     "build": "tsc",
     "dev": "nodemon src/app.ts",
     "test": "cross-env NODE_ENV=test jest --forceExit",
-    "test:coverage": "cross-env NODE_ENV=test jest --coverage --forceExit"
+    "test:coverage": "cross-env NODE_ENV=test jest --coverage --forceExit",
+    "db:init": "ts-node src/database/init-collections.ts",
+    "seed": "ts-node src/database/seed.ts"
   },
   "keywords": [],
   "author": "",
@@ -36,6 +38,7 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.14.1",
-    "nodemailer": "^7.0.2"
+    "nodemailer": "^7.0.2",
+    "translate-google": "^1.5.0"
   }
 }
