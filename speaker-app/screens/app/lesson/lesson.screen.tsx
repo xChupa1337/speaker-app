@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import useTheme from "@/store/theme";
+import useUserStore from "@/store/user";
 import LessonHeader from "@/components/share/lessons-compnonents/lesson-header";
 import Button from "@/components/ui/button";
 import LessonVideoPlayer from "@/components/share/lessons-compnonents/lesson-video-player";
@@ -23,6 +24,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API } from "@/services/api";
 import Loading from "@/components/share/loading";
 import Error from "@/components/share/error";
+import ConfettiAnimation from "@/components/share/confetti-animation";
 
 export type selectedAnswer = {
   question: string;
@@ -32,12 +34,15 @@ export type selectedAnswer = {
 const LessonScreen = () => {
   const { id } = useLocalSearchParams();
   const { isDarkMode } = useTheme();
+  const { user, updateUser } = useUserStore();
 
   const [lesson, setLesson] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<
     selectedAnswer | undefined
   >(undefined);
+  const [correctAnswersCount, setCorrectAnswersCount] = useState(0);
+  const [incorrectAnswersCount, setIncorrectAnswersCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
 
@@ -87,6 +92,10 @@ const LessonScreen = () => {
   const isLessonFinished = currentPage >= selectedLesson.lessonData.length;
   const progress = (currentPage * 100) / selectedLesson.lessonData.length;
 
+  const totalQuestionsCount = correctAnswersCount + incorrectAnswersCount;
+  // If there are no questions, or more than half are correct, it's a success
+  const isSuccess = totalQuestionsCount === 0 || correctAnswersCount >= totalQuestionsCount / 2;
+
   const handleOpenSheet = () => {
     if (selectedAnswer !== undefined) {
       lessonBottomSheetRef.current?.expand();
@@ -94,15 +103,25 @@ const LessonScreen = () => {
   };
 
   const handleUpdatePage = () => {
+    if (selectedAnswer !== undefined) {
+      if (selectedAnswer.correct) {
+        setCorrectAnswersCount((prev) => prev + 1);
+      } else {
+        setIncorrectAnswersCount((prev) => prev + 1);
+      }
+    }
+
     if (!isLessonFinished) {
       setCurrentPage((prev) => prev + 1);
     } else {
       setCurrentPage(0);
       setSelectedAnswer(undefined);
+      setCorrectAnswersCount(0);
+      setIncorrectAnswersCount(0);
     }
   };
 
-  const handlePress = () => {
+  const handlePress = async () => {
     if (!isLessonFinished) {
       const current = selectedLesson.lessonData[currentPage];
       if (!current.isQuestion) {
@@ -115,6 +134,19 @@ const LessonScreen = () => {
       }
       handleOpenSheet();
     } else {
+      if (id !== "test") {
+        try {
+          const token = await AsyncStorage.getItem("token");
+          if (token && isSuccess) {
+            await API.user.saveProgress(id as string, token);
+            if (user && !user.progress?.includes(id)) {
+              updateUser({ progress: [...(user.progress || []), id] });
+            }
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
       router.navigate("/(tabs)/book");
     }
   };
@@ -127,11 +159,11 @@ const LessonScreen = () => {
         className={`flex-1 ${isDarkMode ? "bg-bg-dark" : "bg-bg-light"}`}
       >
         <View className="flex-1 justify-between px-5">
-          <ScrollView className="flex-grow">
+          <ScrollView className="flex-grow" keyboardShouldPersistTaps="handled">
             <LessonHeader isDarkMode={isDarkMode} progressNumber={progress} />
 
             {isLessonFinished ? (
-              <CompletedLessonScreen />
+              <CompletedLessonScreen isSuccess={isSuccess} />
             ) : (
               <>
                 <Text className="text-primary text-title-medium mb-4">
@@ -169,7 +201,7 @@ const LessonScreen = () => {
           <View className="pb-4">
             <Button onPress={handlePress}>
               {isLessonFinished
-                ? "Close"
+                ? isSuccess ? "Close" : "Try Again"
                 : selectedLesson.lessonData[currentPage]?.isQuestion
                   ? "Check"
                   : "Continue"}
@@ -192,6 +224,8 @@ const LessonScreen = () => {
           isDarkMode={isDarkMode}
         />
       )}
+
+      {isLessonFinished && isSuccess && <ConfettiAnimation />}
     </GestureHandlerRootView>
   );
 };

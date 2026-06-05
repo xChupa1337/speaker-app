@@ -5,6 +5,7 @@ import { View, ActivityIndicator } from "react-native";
 import { API } from "@/services/api";
 import { User } from "@/types/user.types";
 import * as Notifications from "expo-notifications";
+import useUserStore from "@/store/user";
 
 export default function Index() {
   const [isAuthUser, setIsAuthUser] = useState(false);
@@ -26,7 +27,10 @@ export default function Index() {
           } = await API.user.getUserData(userToken);
           if (!resp.data.isVerified) {
             router.replace("/auth/confirmation-code");
-          } else setIsAuthUser(true);
+          } else {
+            useUserStore.getState().setUser(resp.data);
+            setIsAuthUser(true);
+          }
         } catch (e) {
           setIsAuthUser(false);
           await AsyncStorage.removeItem("token");

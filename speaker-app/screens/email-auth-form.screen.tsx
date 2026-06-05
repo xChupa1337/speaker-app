@@ -17,6 +17,7 @@ import { User } from "@/types/user.types";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
 import * as AuthSession from "expo-auth-session";
+import useUserStore from "@/store/user";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -58,8 +59,15 @@ const EmailAuthFormScreen = () => {
     webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID || "dummy-web-client",
     iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID || "dummy-ios-client",
     androidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID || "dummy-android-client",
-    redirectUri: AuthSession.makeRedirectUri(), // Automatic detection for Dev Builds / Production
   });
+
+  // Debug: show redirect URI on first render
+  React.useEffect(() => {
+    if (request?.redirectUri) {
+      console.log("🔗 Google OAuth redirectUri:", request.redirectUri);
+      alert("Redirect URI: " + request.redirectUri);
+    }
+  }, [request]);
 
   React.useEffect(() => {
     if (response?.type === "success") {
@@ -98,6 +106,7 @@ const EmailAuthFormScreen = () => {
         if (response.success) {
           await AsyncStorage.setItem("token", response.data.token);
           const user = response.data.user;
+          useUserStore.getState().setUser(user);
           if (user.isVerified) {
             router.navigate("/(tabs)/book");
           } else {
@@ -143,17 +152,21 @@ const EmailAuthFormScreen = () => {
       } catch (e) {
         console.log(e);
 
+        let errorMsg = "Something went wrong";
         if (axios.isAxiosError(e)) {
           console.log("❗️Axios Error Message:", e.message);
           console.log("❗️Axios Response Data:", e.response?.data);
           console.log("❗️Axios Response Status:", e.response?.status);
           console.log("❗️Axios Response Headers:", e.response?.headers);
+          errorMsg = e.response?.data?.error || e.message || "Network error";
+        } else if (e instanceof Error) {
+          errorMsg = e.message;
         }
 
         setIsError({
           emailError: undefined,
           passwordError: undefined,
-          reqError: "Something went wrong",
+          reqError: `${errorMsg} (URL: ${process.env.EXPO_PUBLIC_BACKEND_URL || "NOT SET"})`,
         });
       }
     }

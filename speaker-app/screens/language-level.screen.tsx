@@ -38,8 +38,8 @@ const LanguageLevelScreen = () => {
     setSelectedLanguageLevel(level);
   };
 
-  const _handlePressButtonAsync = async () => {
-    await WebBrowser.openBrowserAsync("https://expo.dev");
+  const _handlePressButtonAsync = () => {
+    router.push("/level-test?fromAuth=true");
   };
 
   const handlePress = () => {

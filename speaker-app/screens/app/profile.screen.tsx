@@ -3,9 +3,11 @@ import { Animated, SafeAreaView, View, Text, Image } from "react-native";
 import useTheme from "@/store/theme";
 import ProfileHeader from "@/components/share/profile-header";
 import ProfileScreenBody from "@/components/share/profile-screen-body";
+import useUserStore from "@/store/user";
 
 const ProfileScreen = () => {
   const { isDarkMode } = useTheme();
+  const { user } = useUserStore();
   const scrollY = useRef(new Animated.Value(0)).current;
 
   return (
@@ -25,15 +27,13 @@ const ProfileScreen = () => {
           <View className="flex-row gap-3">
             <Image
               className="rounded-full w-[65px] h-[65px]"
-              source={{
-                uri: "https://i.pinimg.com/736x/fd/30/ef/fd30ef808f9e58031f40c98581418e1d.jpg",
-              }}
+              source={user?.avatarUri || require("@/assets/images/humans/9334237.jpg")}
             />
             <View className="pt-2">
               <Text
                 className={`text-title-xs ${isDarkMode ? "text-bg-light" : "text-bg-dark"}`}
               >
-                Andrew Boyko 🧑‍💻
+                {user?.name || user?.email || 'User'} 🧑‍💻
               </Text>
               <Text
                 className={`text-body-small ${isDarkMode ? "text-body-secondary-dark" : "text-body-secondary-light"}`}
@@ -48,7 +48,7 @@ const ProfileScreen = () => {
             <Text
               className={`${isDarkMode ? "text-bg-light" : "text-bg-dark"} text-label-small`}
             >
-              Intermediate
+              {user?.level || "Not Tested"}
             </Text>
           </View>
         </View>
