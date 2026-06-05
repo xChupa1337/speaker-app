@@ -94,11 +94,9 @@ export default function Home() {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="flex flex-col sm:flex-row justify-center gap-4 pt-4"
           >
-            <Button asChild size="lg" className="h-14 px-8 text-lg rounded-full shadow-2xl shadow-primary/30 font-bold">
-              <a href="https://drive.google.com/uc?export=download&id=1Vaz2Aev-k9NCXp2mBdE8SiyZNrvsmmOe" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                <Download className="h-5 w-5" />
-                <span>Download APK</span>
-              </a>
+            <Button size="lg" className="h-14 px-8 text-lg rounded-full shadow-2xl shadow-primary/30 font-bold cursor-pointer" onClick={() => window.open("https://drive.google.com/uc?export=download&id=1Vaz2Aev-k9NCXp2mBdE8SiyZNrvsmmOe", "_blank")}>
+              <Download className="mr-2 h-5 w-5" />
+              Download APK
             </Button>
             <Button variant="outline" size="lg" className="h-14 px-8 text-lg rounded-full font-bold border-slate-200 text-slate-700 hover:bg-slate-50">
               <PlayCircle className="mr-2 h-5 w-5 text-primary" />
@@ -366,10 +364,8 @@ export default function Home() {
                 <li className="flex items-center gap-3 font-medium text-slate-300"><CheckCircle2 className="text-slate-300" /> AI Practice</li>
                 <li className="flex items-center gap-3 font-medium text-slate-300"><CheckCircle2 className="text-slate-300" /> All Languages</li>
               </ul>
-              <Button asChild variant="outline" className="w-full h-14 rounded-full text-lg font-bold border-2 cursor-pointer">
-                <a href="https://drive.google.com/uc?export=download&id=1Vaz2Aev-k9NCXp2mBdE8SiyZNrvsmmOe" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center">
-                  Download APK
-                </a>
+              <Button onClick={() => window.open("https://drive.google.com/uc?export=download&id=1Vaz2Aev-k9NCXp2mBdE8SiyZNrvsmmOe", "_blank")} variant="outline" className="w-full h-14 rounded-full text-lg font-bold border-2 cursor-pointer">
+                Download APK
               </Button>
             </Card>
 
