@@ -96,7 +96,7 @@ export default function Home() {
           >
             <Button size="lg" className="h-14 px-8 text-lg rounded-full shadow-2xl shadow-primary/30 font-bold">
               <Download className="mr-2 h-5 w-5" />
-              Download APK (1 Hour Free)
+              Download APK
             </Button>
             <Button variant="outline" size="lg" className="h-14 px-8 text-lg rounded-full font-bold border-slate-200 text-slate-700 hover:bg-slate-50">
               <PlayCircle className="mr-2 h-5 w-5 text-primary" />
@@ -331,7 +331,7 @@ export default function Home() {
                 <Star className="fill-current" size={20} /><Star className="fill-current" size={20} /><Star className="fill-current" size={20} /><Star className="fill-current" size={20} /><Star className="fill-current" size={20} />
               </div>
               <p className="text-lg font-medium text-slate-700 mb-8 leading-relaxed">
-                "The 1-hour free trial was all I needed to be convinced. The interface is beautiful, and the spaced repetition really works. Best app out there."
+                "The interface is beautiful, and the spaced repetition really works. Best app out there."
               </p>
               <div className="flex items-center gap-4">
                 <Image src="/face1.jpg" alt="Reviewer" width={56} height={56} className="rounded-full object-cover" />
@@ -368,11 +368,11 @@ export default function Home() {
             </Card>
 
             {/* Premium */}
-            <Card className="border-2 border-primary shadow-2xl shadow-primary/20 rounded-[2rem] p-8 bg-white relative transform md:-translate-y-4">
+            <Card className="border-2 border-primary shadow-2xl shadow-primary/20 rounded-[2rem] p-8 bg-white relative transform md:-translate-y-4 overflow-visible">
               <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-white px-4 py-1 rounded-full font-bold text-sm tracking-wide">MOST POPULAR</div>
               <h3 className="text-3xl font-bold mb-2">Premium</h3>
               <p className="text-slate-500 mb-6">Unlock all languages & AI features.</p>
-              <div className="text-5xl font-black mb-8">20 ₴<span className="text-lg text-slate-500 font-medium">/lifetime</span></div>
+              <div className="text-5xl font-black mb-8">99 ₴<span className="text-lg text-slate-500 font-medium">/lifetime</span></div>
               <ul className="space-y-4 mb-8">
                 <li className="flex items-center gap-3 font-medium text-slate-700"><CheckCircle2 className="text-primary" /> English Language</li>
                 <li className="flex items-center gap-3 font-medium text-slate-700"><CheckCircle2 className="text-primary" /> Interactive Lessons</li>
@@ -394,10 +394,10 @@ export default function Home() {
             Ready to become fluent?
           </h2>
           <p className="text-xl text-slate-500 font-medium">
-            Join thousands of learners and start speaking a new language today. The first hour of learning is completely free!
+            Join thousands of learners and start speaking a new language today.
           </p>
           <Button size="lg" className="h-16 px-10 text-xl rounded-full shadow-2xl shadow-primary/30 font-bold hover:scale-105 transition-transform">
-            Start 1-Hour Free Trial
+            Get Premium Now
           </Button>
         </div>
       </section>
