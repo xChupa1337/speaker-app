@@ -50,6 +50,13 @@ export default function AdminPanel() {
   const [vocabTopics, setVocabTopics] = useState<any[]>([]);
   const [usersList, setUsersList] = useState<any[]>([]);
 
+  // Auth states
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthChecking, setIsAuthChecking] = useState(true);
+  const [authEmail, setAuthEmail] = useState("");
+  const [authPassword, setAuthPassword] = useState("");
+  const [authError, setAuthError] = useState("");
+
   // Filtering states
   const [activeLang, setActiveLang] = useState<string>("en");
 
@@ -60,6 +67,12 @@ export default function AdminPanel() {
   const [formData, setFormData] = useState<any>(null);
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const auth = sessionStorage.getItem("adminAuth");
+      if (auth === "true") setIsAuthenticated(true);
+      setIsAuthChecking(false);
+    }
+
     fetch('/api/data')
       .then(res => res.json())
       .then(data => {
@@ -162,6 +175,52 @@ export default function AdminPanel() {
 
   const filteredVocab = vocabTopics.filter(v => v.language === activeLang && v.title?.toLowerCase().includes(searchQuery.toLowerCase()));
   const availableLangs = Array.from(new Set([...lessons.map(l => l.language), ...vocabTopics.map(v => v.language)])).filter(Boolean).sort();
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (authEmail === "admin@speaker.com" && authPassword === "admin123") {
+      sessionStorage.setItem("adminAuth", "true");
+      setIsAuthenticated(true);
+      setAuthError("");
+    } else {
+      setAuthError("Invalid admin credentials");
+    }
+  };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem("adminAuth");
+    setIsAuthenticated(false);
+  };
+
+  if (isAuthChecking) return <div className="min-h-screen bg-slate-50 flex items-center justify-center"><div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div></div>;
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 font-sans">
+        <Card className="w-full max-w-md shadow-2xl shadow-primary/10 rounded-3xl border-0 overflow-hidden">
+          <div className="bg-gradient-to-br from-slate-900 to-slate-800 p-10 flex flex-col items-center justify-center text-white">
+            <Image src="/app-logo.png" alt="Logo" width={64} height={64} className="rounded-2xl shadow-xl mb-5 bg-white p-1" />
+            <h2 className="text-3xl font-black tracking-tight">Speaker OS</h2>
+            <p className="text-slate-300 text-sm mt-2 font-medium">Platform Administration</p>
+          </div>
+          <CardContent className="p-8 bg-white">
+            <form onSubmit={handleLogin} className="space-y-5">
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-slate-700 font-bold">Admin Email</Label>
+                <Input id="email" type="email" placeholder="admin@speaker.com" value={authEmail} onChange={e => setAuthEmail(e.target.value)} required className="h-12 bg-slate-50 border-slate-200 rounded-xl px-4" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password" className="text-slate-700 font-bold">Password</Label>
+                <Input id="password" type="password" placeholder="••••••••" value={authPassword} onChange={e => setAuthPassword(e.target.value)} required className="h-12 bg-slate-50 border-slate-200 rounded-xl px-4" />
+              </div>
+              {authError && <p className="text-red-500 text-sm font-semibold text-center bg-red-50 p-2 rounded-lg">{authError}</p>}
+              <Button type="submit" className="w-full h-12 text-base font-bold mt-4 rounded-xl shadow-md hover:shadow-lg transition-all">Access Dashboard</Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background text-foreground flex overflow-hidden">
