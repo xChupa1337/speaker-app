@@ -64,7 +64,26 @@ const EmailAuthFormScreen = () => {
   React.useEffect(() => {
     if (response?.type === "success") {
       const { authentication } = response;
-      // Handle login success
+      if (authentication?.accessToken) {
+        setIsLoading(true);
+        API.auth
+          .googleAuth(authentication.accessToken)
+          .then(async (res) => {
+            if (res.success) {
+              await AsyncStorage.setItem("token", res.data.token);
+              useUserStore.getState().setUser(res.data.user);
+              router.navigate("/(tabs)/book");
+            }
+          })
+          .catch((e) => {
+            setIsError({
+              emailError: undefined,
+              passwordError: undefined,
+              reqError: "Google login failed",
+            });
+          })
+          .finally(() => setIsLoading(false));
+      }
     }
   }, [response]);
 

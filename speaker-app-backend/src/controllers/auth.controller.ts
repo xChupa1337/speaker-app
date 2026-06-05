@@ -167,3 +167,50 @@ export const verifyEmail: RequestHandler = async (req, res, next) => {
     next(new HttpError("Invalid or expired token", 401));
   }
 };
+
+import axios from "axios";
+
+export const googleSignIn = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { accessToken } = req.body;
+    if (!accessToken) {
+      return next(new HttpError("No access token provided", 400));
+    }
+
+    const { data: profile } = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+
+    if (!profile || !profile.email) {
+      return next(new HttpError("Failed to fetch Google profile", 400));
+    }
+
+    let user = await User.findOne({ email: profile.email });
+    if (!user) {
+      const hashPassword = await bcrypt.hash(Math.random().toString(36).slice(-8), 8);
+      
+      const isPremium = await PremiumEmail.findOne({ email: profile.email });
+      const subscription = isPremium ? "premium" : "standard";
+
+      user = await User.create({
+        email: profile.email,
+        name: profile.name || profile.given_name || "User",
+        password: hashPassword,
+        isVerified: true,
+        subscription,
+      });
+    }
+
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    res.status(200).json({ success: true, data: { token, user } });
+  } catch (e) {
+    next(new HttpError("Google Auth Failed", 400));
+  }
+};

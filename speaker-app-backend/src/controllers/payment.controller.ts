@@ -5,7 +5,7 @@ import { PremiumEmail } from "../models/premium-email.model";
 import { STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, CLIENT_URL } from "../config/env";
 
 const stripe = new Stripe(STRIPE_SECRET_KEY || "sk_test_dummy", {
-  apiVersion: "2024-04-10",
+  apiVersion: "2026-05-27.dahlia" as any,
 });
 
 const getClientUrl = () => {
@@ -25,7 +25,7 @@ export const createCheckoutSession = async (req: Request, res: Response, next: N
               name: "Speaker Premium Subscription",
               description: "Unlock all languages and AI features",
             },
-            unit_amount: 2000, // 20 UAH (in kopecks)
+            unit_amount: 9900, // 99 UAH (in kopecks)
           },
           quantity: 1,
         },
@@ -43,7 +43,7 @@ export const createCheckoutSession = async (req: Request, res: Response, next: N
 export const handleWebhook = async (req: Request, res: Response, next: NextFunction) => {
   const sig = req.headers["stripe-signature"] as string;
 
-  let event: Stripe.Event;
+  let event: any;
 
   try {
     if (STRIPE_WEBHOOK_SECRET) {
@@ -60,7 +60,7 @@ export const handleWebhook = async (req: Request, res: Response, next: NextFunct
 
   try {
       if (event.type === "checkout.session.completed") {
-        const session = event.data.object as Stripe.Checkout.Session;
+        const session = event.data.object as any;
         const customerEmail = session.customer_details?.email;
 
         if (customerEmail) {

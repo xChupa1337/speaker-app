@@ -26,3 +26,7 @@ export const signUp = async (email: string, name: string, password: string) => {
   return (await axiosInstance.post("/auth/sign-up", { email, name, password }))
     .data;
 };
+
+export const googleAuth = async (accessToken: string) => {
+  return (await axiosInstance.post("/auth/google", { accessToken })).data;
+};

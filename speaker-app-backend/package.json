@@ -34,6 +34,7 @@
     "@types/express": "^5.0.1",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/nodemailer": "^6.4.17",
+    "axios": "^1.17.0",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.6",
     "dotenv": "^16.5.0",

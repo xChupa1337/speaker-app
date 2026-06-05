@@ -27,13 +27,19 @@ export default function Home() {
   const handlePremiumCheckout = async () => {
     setLoadingPremium(true);
     try {
-       const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/payment/create-checkout-session` : "http://localhost:5555/api/v1/payment/create-checkout-session", { method: "POST" });
+       const url = process.env.NEXT_PUBLIC_BACKEND_URL ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/payment/create-checkout-session` : "http://localhost:8080/api/v1/payment/create-checkout-session";
+       console.log("Fetching checkout session from:", url);
+       const res = await fetch(url, { method: "POST" });
        const data = await res.json();
        if (data.url) {
          window.location.href = data.url;
+       } else {
+         console.error("No URL returned from backend:", data);
+         alert("Error creating checkout session. Please check console.");
        }
     } catch (e) {
-       console.error(e);
+       console.error("FETCH ERROR:", e);
+       alert("Failed to connect to backend. Are you sure it's running? " + String(e));
     } finally {
        setLoadingPremium(false);
     }
