@@ -14,9 +14,12 @@ const getClientUrl = () => {
 
 export const createCheckoutSession = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const originUrl = req.headers.origin || getClientUrl();
+    
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
+      locale: "en", // Fallback to English since Stripe does not support Ukrainian
       line_items: [
         {
           price_data: {
@@ -30,8 +33,8 @@ export const createCheckoutSession = async (req: Request, res: Response, next: N
           quantity: 1,
         },
       ],
-      success_url: `${getClientUrl()}/?payment=success`,
-      cancel_url: `${getClientUrl()}/?payment=cancel`,
+      success_url: `${originUrl}/?payment=success`,
+      cancel_url: `${originUrl}/?payment=cancel`,
     });
 
     res.status(200).json({ success: true, url: session.url });

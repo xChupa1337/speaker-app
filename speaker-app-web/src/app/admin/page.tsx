@@ -151,15 +151,26 @@ export default function AdminPanel() {
     closeModal();
   };
   
-  const handleDelete = async (type: "lesson" | "vocab", id: string) => {
+  const handleDelete = async (type: "lesson" | "vocab" | "user", id: string) => {
+    if (type === "vocab") {
+      alert("Словник (Vocabulary) наразі жорстко закодований у файлі vocab.ts, тому його не можна видалити через адмін-панель.");
+      return;
+    }
     if (confirm("Delete this item permanently?")) {
       try {
-        await fetch(`/api/data?type=${type}&id=${id}`, { method: 'DELETE' });
-        // Optimistic update
-        if (type === "lesson") setLessons(lessons.filter(l => l.lessonId !== id));
-        else setVocabTopics(vocabTopics.filter(v => v.id !== id));
+        const res = await fetch(`/api/data?type=${type}&id=${id}`, { method: 'DELETE' });
+        const result = await res.json();
+        
+        if (res.ok && result.success) {
+          // Optimistic update
+          if (type === "lesson") setLessons(lessons.filter(l => l.lessonId !== id));
+          if (type === "user") setUsersList(usersList.filter(u => u._id !== id));
+        } else {
+          alert("Failed to delete: " + (result.error || "Unknown error"));
+        }
       } catch(e) {
         console.error(e);
+        alert("Network error. Failed to delete.");
       }
     }
   };
@@ -468,7 +479,9 @@ export default function AdminPanel() {
                                 <td className="px-4 py-3">{u.email || 'N/A'}</td>
                                 <td className="px-4 py-3 text-muted-foreground">{new Date(u.createdAt || Date.now()).toLocaleDateString()}</td>
                                 <td className="px-4 py-3 text-right">
-                                  <Button variant="ghost" size="sm">Manage</Button>
+                                  <Button variant="ghost" size="sm" className="text-red-500 hover:text-red-700 hover:bg-red-50" onClick={() => handleDelete("user", u._id)}>
+                                    Delete
+                                  </Button>
                                 </td>
                               </tr>
                             ))}

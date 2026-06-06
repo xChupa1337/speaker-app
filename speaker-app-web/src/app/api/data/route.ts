@@ -122,14 +122,28 @@ export async function DELETE(req: Request) {
       await mongoose.connect(MONGODB_URI);
     }
     const Chapter = mongoose.models.Chapter || mongoose.model('Chapter', chapterSchema);
+    const Topic = mongoose.models.Topic || mongoose.model('Topic', topicSchema);
+    const User = mongoose.models.User || mongoose.model('User', new mongoose.Schema({}, { strict: false }));
     
     const { searchParams } = new URL(req.url);
     const type = searchParams.get('type');
     const id = searchParams.get('id');
 
-    if (type === 'lesson' && id) {
+    if (!id) return NextResponse.json({ error: "Missing ID" }, { status: 400 });
+
+    if (type === 'lesson') {
        await Chapter.findByIdAndDelete(id);
+       await Topic.deleteMany({ chapterId: id });
        return NextResponse.json({ success: true });
+    }
+    
+    if (type === 'user') {
+       await User.findByIdAndDelete(id);
+       return NextResponse.json({ success: true });
+    }
+    
+    if (type === 'vocab') {
+       return NextResponse.json({ success: false, error: "Vocabulary is read-only (hardcoded in vocab.ts)" }, { status: 400 });
     }
     
     return NextResponse.json({ success: true });
